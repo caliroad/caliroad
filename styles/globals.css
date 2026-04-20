@@ -3,3 +3,13 @@ body {
 	color: var(--fg-text);
 	font-family: "Questrial", Helvetica, sans-serif;
 }
+
+.svg-button {
+	width: 24px;
+
+	background-color: var(--bg-base);
+
+	&:hover {
+		cursor: pointer;
+	}
+}
