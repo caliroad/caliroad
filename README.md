@@ -1,5 +1,6 @@
 <p align="center">
-  <h2 align="center">🤸📚 Caliroad</h2>
+    <img src="assets/logo.png" alt="Caliroad logo" width="400">
+    <h1 align="center">Caliroad</h1>
 </p>
 
 <p align="center">
