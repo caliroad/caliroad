@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="assets/logo.png" alt="Caliroad logo" width="250">
+    <img src="assets/logo.png" alt="Caliroad logo" width="150">
 </p>
 
 <h1 align="center">Caliroad</h1>
