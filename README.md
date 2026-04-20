@@ -1,7 +1,8 @@
 <p align="center">
     <img src="assets/logo.png" alt="Caliroad logo" width="250">
-    <h1 align="center">Caliroad</h1>
 </p>
+
+<h1 align="center">Caliroad</h1>
 
 <p align="center">
 	The visual encyclopedia of Calisthenics exercises
