@@ -1,0 +1,5 @@
+body {
+	background-color: var(--bg-base);
+	color: var(--fg-text);
+	font-family: "Questrial", Helvetica, sans-serif;
+}
