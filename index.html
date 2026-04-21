@@ -42,16 +42,35 @@
 				/>
 				<span class="logo-text">Caliroad</span>
 			</a>
-			<button id="settings" class="svg-button" type="button">
+			<button id="settings" class="icon-button" type="button">
 				<svg data-src="assets/cogwheel.svg"></svg>
 			</button>
 		</header>
 
 		<main></main>
 
+		<dialog id="info-popup">
+			<button class="close-button">&times;</button>
+			<h2 class="popup-title">Welcome to Caliroad!</h2>
+			<h3 class="popup-subtitle">
+				The visual encyclopedia of Calisthenics exercises
+			</h3>
+
+			<ul>
+				<li>Click on nodes to see the contents of an exercise</li>
+				<li>Use the filter to view relationships between exercises</li>
+				<li>Use the search bar to locate an specific exercise</li>
+			</ul>
+			<p></p>
+		</dialog>
+
 		<footer>
-			<button id="help" class="svg-button" type="button">
-				<svg data-src="assets/help-circle.svg"></svg>
+			<div class="left-box"></div>
+			<p>
+				Made with ❤️ by <a href="https://github.com/pocco81">Pocco81</a>
+			</p>
+			<button id="info-button" class="icon-button" type="button">
+				<svg data-src="assets/info.svg"></svg>
 			</button>
 		</footer>
 	</body>

@@ -1,6 +1,8 @@
 @import "reset.css";
 @import "globals.css";
 @import "tokens.css";
+@import "components/icon-button.css";
+@import "components/dialog.css";
 
 body {
 	height: 100dvh;
@@ -45,7 +47,25 @@ main {
 
 footer {
 	position: fixed;
-	bottom: 16px;
-	right: 16px;
-	z-index: 10;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 16px;
+
+	/* Center <p> relative to the screen */
+	p {
+		position: absolute;
+		left: 50%;
+		transform: translateX(-50%);
+		a {
+			text-decoration: none;
+		}
+	}
+
+	.icon-button {
+		margin-right: 16px;
+	}
 }

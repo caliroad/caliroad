@@ -1,0 +1,9 @@
+.icon-button {
+	width: 24px;
+
+	background-color: var(--bg-base);
+
+	&:hover {
+		cursor: pointer;
+	}
+}
