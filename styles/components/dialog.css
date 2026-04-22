@@ -1,5 +1,7 @@
 .popup-title {
-	font-family: "Lamarkie";
+	font-family: "Ekatori";
+	font-weight: bold;
+	font-size: 2rem;
 }
 
 .popup-subtitle {
@@ -45,6 +47,6 @@ dialog .close-button {
 }
 
 dialog::backdrop {
-	background-color: rgba(0, 0, 0, 0.3);
+	background-color: rgba(0, 0, 0, 0.2);
 	backdrop-filter: blur(4px);
 }

@@ -1,12 +1,8 @@
-.icon-button {
-	width: 24px;
+.text-button {
+	font-size: 1.1rem;
 
 	background-color: transparent;
 	color: var(--fg-subtext);
 
 	cursor: pointer;
-
-	&:hover {
-		color: var(--fg-text);
-	}
 }

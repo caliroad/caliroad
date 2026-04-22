@@ -19,7 +19,7 @@
 			href="https://fonts.cdnfonts.com/css/questrial"
 			rel="stylesheet"
 		/>
-		<link href="https://fonts.cdnfonts.com/css/lamarkie" rel="stylesheet" />
+		<link href="https://fonts.cdnfonts.com/css/ekatori" rel="stylesheet" />
 
 		<!-- Styles -->
 		<script defer src="scripts/auto-theme-toggle.js"></script>
@@ -34,20 +34,31 @@
 	</head>
 	<body>
 		<header>
+			<button id="search" class="text-button">Search</button>
+
 			<a class="logo" href="#">
-				<img
-					class="logo-image"
-					src="assets/logo.png"
-					alt="Caliroad logo"
-				/>
-				<span class="logo-text">Caliroad</span>
+				<img src="assets/logo.png" alt="Caliroad logo" />
+				<p>Caliroad</p>
 			</a>
-			<button id="settings" class="icon-button" type="button">
-				<svg data-src="assets/cogwheel.svg"></svg>
-			</button>
+
+			<button id="filter" class="text-button">Filter</button>
 		</header>
 
 		<main></main>
+
+		<footer>
+			<button id="settings" class="icon-button" type="button">
+				<svg data-src="assets/cogwheel.svg"></svg>
+			</button>
+
+			<p>
+				Made with ❤️ by <a href="https://github.com/pocco81">Pocco81</a>
+			</p>
+
+			<button id="info-button" class="icon-button" type="button">
+				<svg data-src="assets/info.svg"></svg>
+			</button>
+		</footer>
 
 		<dialog id="info-popup">
 			<button class="close-button">&times;</button>
@@ -63,15 +74,5 @@
 			</ul>
 			<p></p>
 		</dialog>
-
-		<footer>
-			<div class="left-box"></div>
-			<p>
-				Made with ❤️ by <a href="https://github.com/pocco81">Pocco81</a>
-			</p>
-			<button id="info-button" class="icon-button" type="button">
-				<svg data-src="assets/info.svg"></svg>
-			</button>
-		</footer>
 	</body>
 </html>
