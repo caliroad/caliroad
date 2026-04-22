@@ -10,7 +10,7 @@
 	margin-bottom: 24px;
 }
 
-dialog {
+dialog[open] {
 	position: relative;
 	border: 2px solid var(--fg-subtext);
 	border-radius: 8px;

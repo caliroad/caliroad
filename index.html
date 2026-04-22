@@ -47,25 +47,28 @@
 		<main></main>
 
 		<footer>
-			<button
-				id="settings"
-				class="icon-button"
-				type="button"
-				title="Settings"
-			>
-				<svg data-src="assets/cogwheel.svg"></svg>
-			</button>
+			<div class="settings">
+				<button
+					id="settings-button"
+					class="icon-button"
+					title="Settings"
+					popovertarget="settings-menu"
+				>
+					<svg data-src="assets/cogwheel.svg"></svg>
+				</button>
+
+				<div id="settings-menu" popover>
+					<h1>Settings</h1>
+					<button>Option 1</button>
+					<button>Option 2</button>
+				</div>
+			</div>
 
 			<p>
 				Made with ❤️ by <a href="https://github.com/pocco81">Pocco81</a>
 			</p>
 
-			<button
-				id="info-button"
-				class="icon-button"
-				type="button"
-				title="Info"
-			>
+			<button id="info-button" class="icon-button" title="Info">
 				<svg data-src="assets/info.svg"></svg>
 			</button>
 		</footer>
@@ -82,7 +85,6 @@
 				<li>Use the filter to view relationships between exercises</li>
 				<li>Use the search bar to locate an specific exercise</li>
 			</ul>
-			<p></p>
 		</dialog>
 	</body>
 </html>
