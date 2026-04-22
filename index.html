@@ -22,7 +22,6 @@
 		<link href="https://fonts.cdnfonts.com/css/ekatori" rel="stylesheet" />
 
 		<!-- Styles -->
-		<script defer src="scripts/auto-theme-toggle.js"></script>
 		<link rel="stylesheet" href="styles/main.css" />
 
 		<!-- Scripts -->
@@ -30,7 +29,8 @@
 			src="https://unpkg.com/external-svg-loader@1.0.0/svg-loader.min.js"
 			defer
 		></script>
-		<script defer src="scripts/main.js"></script>
+		<script src="scripts/auto-theme-toggle.js"></script>
+		<script defer type="module" src="scripts/main.js"></script>
 	</head>
 	<body>
 		<header>
@@ -60,7 +60,7 @@
 				<div id="settings-menu" popover>
 					<p>Settings</p>
 					<div class="options">
-						<label class="switch">
+						<label id="theme-toggle" class="switch">
 							<span class="switch-box">
 								<input type="checkbox" />
 								<span class="slider"></span>

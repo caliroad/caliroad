@@ -72,6 +72,8 @@ footer {
 	padding: 16px;
 	border-radius: 8px;
 
+	user-select: none;
+
 	p {
 		font-family: "Ekatori";
 		font-size: 1.4rem;
