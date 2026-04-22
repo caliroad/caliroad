@@ -5,4 +5,8 @@
 	color: var(--fg-subtext);
 
 	cursor: pointer;
+
+	&:hover {
+		color: var(--fg-text);
+	}
 }
