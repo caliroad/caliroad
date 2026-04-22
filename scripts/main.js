@@ -15,3 +15,16 @@ infoButton.addEventListener("click", () => {
 infoCloseButton.addEventListener("click", () => {
 	infoDialog.close()
 })
+
+const button = document.getElementById("settings-button")
+const popover = document.getElementById("settings-menu")
+
+button.addEventListener("click", () => {
+	// wait for popover to open
+	requestAnimationFrame(() => {
+		const rect = button.getBoundingClientRect()
+
+		popover.style.top = `${rect.top - popover.offsetHeight - 8}px`
+		popover.style.left = `${rect.right + 4}px`
+	})
+})

@@ -4,6 +4,7 @@
 @import "components/icon-button.css";
 @import "components/text-button.css";
 @import "components/dialog.css";
+@import "components/slide-switch.css";
 
 body {
 	height: 100dvh;
@@ -63,5 +64,24 @@ footer {
 
 	a {
 		text-decoration: none;
+	}
+}
+
+#settings-menu {
+	border: 2px solid var(--fg-subtext);
+	padding: 16px;
+	border-radius: 8px;
+
+	p {
+		font-family: "Ekatori";
+		font-size: 1.4rem;
+		font-weight: bold;
+		text-align: center;
+		margin-bottom: 8px;
+	}
+
+	.options {
+		display: flex;
+		flex-direction: column;
 	}
 }
