@@ -10,3 +10,15 @@ button.addEventListener("click", () => {
 		settingsMenu.style.left = `${rect.right + 4}px`
 	})
 })
+
+const settingsMenuToggleButton = settingsMenu.querySelector(
+	"#theme-toggle input"
+)
+
+const root = document.documentElement
+
+settingsMenuToggleButton.addEventListener("change", () => {
+	let currentTheme = root.dataset.theme
+
+	root.dataset.theme = currentTheme == "light" ? "dark" : "light"
+})
