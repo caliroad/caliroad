@@ -1,21 +1,21 @@
 :root {
 	color-scheme: light;
 
-	--bg-base: #fff;
-	--bg-surface: #eee;
-	--bg-overlay: #ccc;
+	--bg-base: #fffaeb;
+	--bg-surface: #e6e3d7;
+	--bg-overlay: #cecbc0;
 
-	--fg-text: #111;
+	--fg-text: #0c0613;
 	--fg-subtext: #555;
 }
 
 [data-theme="dark"] {
 	color-scheme: dark;
 
-	--bg-base: #000;
-	--bg-surface: #222;
-	--bg-overlay: #444;
+	--bg-base: #0c0613;
+	--bg-surface: #2e2d2d;
+	--bg-overlay: #3a3938;
 
-	--fg-text: #fff;
+	--fg-text: #fffaeb;
 	--fg-subtext: #ddd;
 }

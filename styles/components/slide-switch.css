@@ -42,7 +42,7 @@
 	width: 12px;
 
 	border-radius: 50%;
-	background-color: white;
+	background-color: var(--fg-subtext);
 
 	transition: 0.4s;
 }
