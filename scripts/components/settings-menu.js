@@ -1,5 +1,6 @@
 const button = document.getElementById("settings-button")
 const settingsMenu = document.getElementById("settings-menu")
+const root = document.documentElement
 
 button.addEventListener("click", () => {
 	// wait for settingsMenu to open
@@ -11,14 +12,39 @@ button.addEventListener("click", () => {
 	})
 })
 
-const settingsMenuToggleButton = settingsMenu.querySelector(
-	"#theme-toggle input"
+const settingsMenuDarkModeToggle = settingsMenu.querySelector(
+	"#dark-mode-toggle input"
 )
 
-const root = document.documentElement
+const settingsMenuPreferencesToggle = settingsMenu.querySelector(
+	"#preferences-toggle input"
+)
 
-settingsMenuToggleButton.addEventListener("change", () => {
-	let currentTheme = root.dataset.theme
+settingsMenuDarkModeToggle.addEventListener("change", () => {
+	let isChecked = settingsMenuDarkModeToggle.checked
+	let newTheme = isChecked ? "dark" : "light"
+	let savePreferences = localStorage.getItem("savePreferences") !== null
 
-	root.dataset.theme = currentTheme == "light" ? "dark" : "light"
+	if (savePreferences) {
+		localStorage.setItem("savedTheme", newTheme)
+	}
+
+	root.dataset.theme = newTheme
+})
+
+// sync darkModeToggle's state to system theme changes and page reloads
+function syncDarkModeToggle() {
+	settingsMenuDarkModeToggle.checked = root.dataset.theme === "dark"
+}
+
+window.addEventListener("themechange", syncDarkModeToggle)
+document.addEventListener("DOMContentLoaded", syncDarkModeToggle)
+
+settingsMenuPreferencesToggle.addEventListener("change", () => {
+	let isChecked = settingsMenuPreferencesToggle.checked
+
+	if (isChecked) {
+		localStorage.setItem("savePreferences", "")
+		localStorage.setItem("savedTheme", root.dataset.theme)
+	} else localStorage.removeItem("savePreferences")
 })
