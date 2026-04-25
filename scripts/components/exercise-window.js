@@ -3,6 +3,9 @@ import matter from "https://esm.sh/gray-matter"
 
 const websiteLogo = document.querySelector(".logo")
 const exerciseWindow = document.querySelector("#exercise-window")
+const exerciseWindowCloseButton = exerciseWindow.querySelector(
+	"#exercise-window .close-button"
+)
 const bannerTitle = exerciseWindow.querySelector(".banner h1")
 const bannerImg = exerciseWindow.querySelector(".banner img")
 const contentMusclesEl = exerciseWindow.querySelector(".content .muscles")
@@ -10,6 +13,10 @@ const contentFreeformEl = exerciseWindow.querySelector(".content .freeform")
 
 websiteLogo.addEventListener("click", () => {
 	exerciseWindow.showModal()
+})
+
+exerciseWindowCloseButton.addEventListener("click", () => {
+	exerciseWindow.close()
 })
 
 function renderList(className, title, items) {
