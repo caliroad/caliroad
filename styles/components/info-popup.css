@@ -1,21 +1,21 @@
-.popup-title {
-	font-family: "Ekatori";
-	font-weight: bold;
-	font-size: 2rem;
+#info-popup {
+	.popup-title {
+		font-family: "Ekatori";
+		font-weight: bold;
+		font-size: 2rem;
+	}
+
+	.popup-subtitle {
+		font-weight: italic;
+		color: var(--fg-subtext);
+		margin-bottom: 24px;
+	}
 }
 
-.popup-subtitle {
-	font-weight: italic;
-	color: var(--fg-subtext);
-	margin-bottom: 24px;
-}
-
-dialog[open] {
-	position: relative;
+#info-popup[open] {
 	border: 2px solid var(--fg-subtext);
 	border-radius: 8px;
 	padding: 32px 24px;
-	margin: auto;
 
 	display: flex;
 	flex-direction: column;
@@ -26,7 +26,7 @@ dialog[open] {
 	}
 }
 
-dialog .close-button {
+#info-popup .close-button {
 	position: absolute;
 	top: 10px;
 	right: 10px;
@@ -44,9 +44,4 @@ dialog .close-button {
 	cursor: pointer;
 	background: none;
 	font-size: 14px;
-}
-
-dialog::backdrop {
-	background-color: rgba(0, 0, 0, 0.2);
-	backdrop-filter: blur(4px);
 }

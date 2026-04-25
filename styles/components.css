@@ -1,5 +1,6 @@
 @import "components/icon-button.css";
 @import "components/text-button.css";
-@import "components/dialog.css";
+@import "components/info-popup.css";
+@import "components/exercise-window.css";
 @import "components/slide-switch.css";
 @import "components/settings-menu.css";

@@ -1,0 +1,87 @@
+#exercise-window[open] {
+	width: 700px;
+	height: 90vh;
+	max-width: 90vw;
+	border: 2px solid var(--fg-subtext);
+	border-radius: 8px;
+	padding: 0;
+	position: relative;
+	overflow: auto;
+}
+
+#exercise-window {
+	.content {
+		margin: 24px;
+	}
+}
+
+#exercise-window .banner {
+	position: relative;
+	width: 100%;
+	height: 250px;
+	margin-bottom: 90px;
+
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+
+	h1 {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		/* Shift the element left and up by half its own size */
+		transform: translate(-50%, -50%);
+
+		font-family: "Ekatori";
+		font-size: 4rem;
+		text-decoration: underline;
+		color: #fffaeb;
+	}
+
+	.avatar {
+		width: 22%;
+		aspect-ratio: 1 / 1;
+		border-radius: 50%;
+		border: 4px solid #fffaeb;
+
+		position: absolute;
+		bottom: 0;
+		left: 50%;
+		transform: translate(-50%, 50%);
+	}
+}
+
+#exercise-window .content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	.muscles {
+		display: flex;
+		justify-content: space-evenly;
+		width: 80%;
+		gap: 24px;
+
+		list-style-position: inside;
+		padding: 8px;
+		margin-bottom: 8px;
+		border-radius: 8px;
+		border: 2px solid black;
+	}
+
+	.freeform {
+		h1,
+		h2,
+		h3,
+		h4 {
+			margin: 8px;
+		}
+
+		p {
+			line-height: 1.4;
+		}
+	}
+}
