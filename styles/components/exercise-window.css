@@ -1,11 +1,22 @@
 #exercise-window[open] {
-	width: 700px;
+	max-width: 700px;
 	height: 90vh;
-	max-width: 90vw;
+
 	border: 2px solid var(--fg-subtext);
 	border-radius: 8px;
 	padding: 0;
 	overflow: auto;
+	transition: all 0.4s ease;
+
+	@media (max-width: 768px) {
+		width: 100vw;
+		height: 100vh;
+		max-width: none;
+		max-height: none;
+		border: none;
+		border-radius: none;
+		margin: 0;
+	}
 }
 
 #exercise-window {
@@ -65,7 +76,7 @@
 		gap: 24px;
 
 		list-style-position: inside;
-		padding: 8px;
+		padding: 16px;
 		margin-bottom: 8px;
 		border-radius: 8px;
 		border: 2px solid black;
