@@ -8,6 +8,7 @@ secondary-muscles:
         "Serratus Anterior",
         "Pectoralis",
     ]
+videos: ["https://youtube.com", "https://youtube.com", "https://youtube.com"]
 ---
 
 ## Execution

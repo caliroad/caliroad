@@ -21,17 +21,16 @@ dialog[open] {
 		align-items: center;
 		justify-content: center;
 
-		width: 24px;
-		height: 24px;
+		width: 32px;
+		height: 32px;
 		border: 2px solid var(--bg-base);
 		border-radius: 50%;
-		padding: 0;
 		line-height: 1;
 
 		cursor: pointer;
 		background-color: var(--fg-subtext);
 		color: var(--bg-base);
-		font-size: 14px;
+		font-style: bold;
 	}
 }
 

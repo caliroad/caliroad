@@ -89,10 +89,10 @@
 		</footer>
 
 		<dialog id="exercise-window" closeby="closerequest">
-			<button class="close-button">&times;</button>
+			<button class="close-button">✖</button>
 			<div class="banner">
 				<img alt="Banner image" />
-				<h1></h1>
+				<h1 class="title"></h1>
 				<div class="avatar">
 					<img src="assets/planche_avatar.png" alt="Avatar" />
 				</div>
@@ -100,11 +100,32 @@
 			<div class="content">
 				<div class="muscles"></div>
 				<div class="freeform"></div>
+				<div class="carousel-container">
+					<div class="slide-panel">
+						<button class="nav-btn prev">↢</button>
+
+						<div class="carousel">
+							<img id="card-1" class="card" />
+							<img id="card-2" class="card" />
+							<img id="card-3" class="card" />
+							<img id="card-4" class="card" />
+						</div>
+
+						<button class="nav-btn next">↣</button>
+					</div>
+
+					<nav class="scroll-markers">
+						<a class="marker" href="#card-1"></a>
+						<a class="marker" href="#card-2"></a>
+						<a class="marker" href="#card-3"></a>
+						<a class="marker" href="#card-4"></a>
+					</nav>
+				</div>
 			</div>
 		</dialog>
 
 		<dialog id="info-popup">
-			<button class="close-button">&times;</button>
+			<button class="close-button">✖</button>
 			<h2 class="popup-title">Welcome to Caliroad!</h2>
 			<h3 class="popup-subtitle">
 				The visual encyclopedia of Calisthenics exercises
