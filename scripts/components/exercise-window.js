@@ -1,7 +1,6 @@
 import { marked } from "https://esm.sh/marked"
 import matter from "https://esm.sh/gray-matter"
 
-const websiteLogo = document.querySelector(".logo")
 const exerciseWindow = document.querySelector("#exercise-window")
 const exerciseWindowCloseButton = exerciseWindow.querySelector(
 	"#exercise-window .close-button"
@@ -11,12 +10,17 @@ const bannerImg = exerciseWindow.querySelector(".banner img")
 const contentMusclesEl = exerciseWindow.querySelector(".content .muscles")
 const contentFreeformEl = exerciseWindow.querySelector(".content .freeform")
 
-websiteLogo.addEventListener("click", () => {
-	exerciseWindow.showModal()
-})
-
 exerciseWindowCloseButton.addEventListener("click", () => {
 	exerciseWindow.close()
+})
+
+// removes the exercise from the hash without reloading the website
+exerciseWindow.addEventListener("close", () => {
+	history.pushState(
+		"",
+		document.title,
+		window.location.pathname + window.location.search
+	)
 })
 
 function renderList(className, title, items) {
@@ -32,9 +36,7 @@ function renderList(className, title, items) {
   `
 }
 
-export async function loadExercise(name) {
-	const basePath = `../../exercises/${name}/`
-
+async function getExercise(basePath) {
 	try {
 		const res = await fetch(basePath + `exercise.md`)
 
@@ -42,32 +44,57 @@ export async function loadExercise(name) {
 			throw new Error(`HTTP error: ${res.status}`)
 		}
 
-		// parse Markdown information
 		const text = await res.text()
-		const { data, content } = matter(text)
-		const exerciseContentHTML = marked.parse(content)
-
-		// render the data
-		bannerImg.setAttribute("src", basePath + "banner.jpg")
-		bannerTitle.textContent = data.title
-		contentFreeformEl.innerHTML = exerciseContentHTML
-
-		const primaryMuscles = renderList(
-			"primary-muscles",
-			"Primary Muscles",
-			data["primary-muscles"]
-		)
-		const secondaryMuscles = renderList(
-			"secondary-muscles",
-			"Secondary Muscles",
-			data["secondary-muscles"]
-		)
-
-		contentMusclesEl.innerHTML = primaryMuscles + secondaryMuscles
+		return text
 	} catch (err) {
 		console.error(err)
-		contentFreeformEl.innerHTML = `<p>Failed to load exercise.</p>`
+		return false
 	}
 }
 
-loadExercise("planche")
+function loadExerciseToWindow(exerciseText, basePath) {
+	// parse Markdown information
+	const { data, content } = matter(exerciseText)
+	const exerciseContentHTML = marked.parse(content)
+
+	// render the data
+	bannerImg.setAttribute("src", basePath + "banner.jpg")
+	bannerTitle.textContent = data.title
+	contentFreeformEl.innerHTML = exerciseContentHTML
+
+	const primaryMuscles = renderList(
+		"primary-muscles",
+		"Primary Muscles",
+		data["primary-muscles"]
+	)
+	const secondaryMuscles = renderList(
+		"secondary-muscles",
+		"Secondary Muscles",
+		data["secondary-muscles"]
+	)
+
+	contentMusclesEl.innerHTML = primaryMuscles + secondaryMuscles
+}
+
+// verify an exercise exists and renders it to the screen
+async function loadExercise(name) {
+	const basePath = `../../exercises/${name}/`
+	const exerciseText = await getExercise(basePath)
+
+	if (exerciseText !== false) {
+		loadExerciseToWindow(exerciseText, basePath)
+		exerciseWindow.showModal()
+	}
+}
+
+// client-side routing
+async function handleRoute() {
+	const hash = window.location.hash.slice(1)
+
+	if (!hash) return
+
+	await loadExercise(hash)
+}
+
+window.addEventListener("hashchange", handleRoute)
+window.addEventListener("DOMContentLoaded", handleRoute)
