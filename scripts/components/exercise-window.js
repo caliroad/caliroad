@@ -65,6 +65,36 @@ function getVideoThumbnailURL(videoURL) {
 }
 
 /**
+ * Get JSON metadata of a video and return its contents
+ * @param {string} videoURL - YouTube video URL
+ *
+ * @returns {Promise<{ videoTitle: string, author: string, authorUrl: string }>}
+ * */
+async function getVideoMeta(videoURL) {
+	try {
+		const endpoint = `https://www.youtube.com/oembed?url=${encodeURIComponent(videoURL)}&format=json`
+		const res = await fetch(endpoint)
+
+		if (!res.ok) throw new Error("Failed to fetch metadata")
+
+		const data = await res.json()
+
+		return {
+			videoTitle: data.title,
+			author: data.author_name,
+			authorUrl: data.author_url,
+		}
+	} catch (err) {
+		console.error(err)
+		return {
+			videoTitle: "Unknown title",
+			author: "",
+			authorUrl: "",
+		}
+	}
+}
+
+/**
  * Render the Carousel in the exercise window
  * It clears the Carousel and Scroll Markers, and, for every video,
  * creates a card to show the video's thumbnail on and a scroll marker
@@ -80,14 +110,22 @@ function renderCarouselVideos(videos) {
 	markersContainer.innerHTML = ""
 
 	// create card and add a scroll marker for every video
-	videos.forEach((videoURL, idx) => {
-		const card = document.createElement("img")
+	videos.forEach(async (videoURL, idx) => {
+		const card = document.createElement("div")
+		const img = document.createElement("img")
+		const title = document.createElement("h1")
 		const marker = document.createElement("a")
 		const cardID = `card-${idx + 1}`
 
 		card.className = "card"
+		title.className = "title"
+		img.className = "thumbnail"
+
 		card.id = cardID
-		card.src = getVideoThumbnailURL(videoURL)
+		img.src = getVideoThumbnailURL(videoURL)
+		img.alt = "Video Thumbnail"
+		const { videoTitle, author } = await getVideoMeta(videoURL)
+		title.textContent = `${videoTitle} —  @${author}`
 
 		marker.className = "marker"
 		marker.href = `#${cardID}`
@@ -96,8 +134,11 @@ function renderCarouselVideos(videos) {
 			window.open(videoURL, "_blank")
 		})
 
+		card.appendChild(img)
+		card.appendChild(title)
 		carousel.appendChild(card)
 		markersContainer.appendChild(marker)
+
 		observer.observe(card)
 	})
 }

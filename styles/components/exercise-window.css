@@ -114,6 +114,7 @@
 		gap: 1em;
 		width: 100%;
 		overflow-x: auto;
+		padding: 8px;
 
 		scroll-behavior: smooth;
 		scroll-snap-type: x mandatory;
@@ -128,19 +129,42 @@
 		}
 
 		.card {
+			position: relative;
 			align-content: center;
-			object-fit: cover;
 			aspect-ratio: 16 / 9;
-			max-width: 300px;
+			flex: 0 0 300px;
 			text-align: center;
 			background-color: var(--bg-surface);
 			border: 2px solid var(--fg-text);
 			border-radius: 16px;
 			scroll-snap-align: center;
+			transition: all 0.2s ease;
 
 			@media (max-width: 768px) {
-				flex: 0 0 80%;
+				flex: 0 0 64%;
 				aspect-ratio: 2 / 1;
+			}
+
+			&:hover {
+				transform: scale(1.05);
+			}
+
+			.thumbnail {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				border-radius: 16px;
+			}
+
+			.title {
+				position: absolute;
+				top: 8px;
+				left: 8px;
+				text-align: left;
+				color: #fffaeb;
+				text-shadow: 2px 2px 2px black;
+				font-size: 1rem;
+				font-weight: bold;
 			}
 		}
 	}
@@ -149,6 +173,7 @@
 		position: absolute;
 		top: 50%;
 		transform: translateY(-50%);
+		z-index: 10;
 
 		cursor: pointer;
 		border-radius: 50%;
