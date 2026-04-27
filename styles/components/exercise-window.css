@@ -17,10 +17,6 @@
 		border-radius: none;
 		margin: 0;
 	}
-
-	.content {
-		margin: 24px;
-	}
 }
 
 #exercise-window .banner {
@@ -67,6 +63,7 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	margin: 24px;
 }
 
 #exercise-window .content .muscles {
@@ -131,14 +128,13 @@
 		}
 
 		.card {
-			flex: 0 0 20em;
 			align-content: center;
-
 			aspect-ratio: 16 / 9;
+			max-width: 300px;
 			text-align: center;
 			background-color: var(--bg-surface);
-			padding: 1em;
-			border-radius: 0.5em;
+			border: 2px solid var(--fg-text);
+			border-radius: 16px;
 			scroll-snap-align: center;
 
 			@media (max-width: 768px) {
@@ -190,7 +186,7 @@
 		border-radius: 50%;
 		background-color: var(--bg-overlay);
 		text-decoration: none;
-		transition: all 0.4s ease;
+		transition: all 0.2s ease;
 
 		&.active {
 			background-color: var(--fg-subtext);
