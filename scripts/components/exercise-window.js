@@ -5,6 +5,7 @@ const exerciseWindow = document.querySelector("#exercise-window")
 const exerciseWindowCloseButton = exerciseWindow.querySelector(".close-button")
 const bannerTitle = exerciseWindow.querySelector(".banner .title")
 const bannerImg = exerciseWindow.querySelector(".banner img")
+const bannerAvatar = exerciseWindow.querySelector(".banner .avatar img")
 const contentMusclesEl = exerciseWindow.querySelector(".content .muscles")
 const contentFreeformEl = exerciseWindow.querySelector(".content .freeform")
 const carousel = document.querySelector(".slide-panel .carousel")
@@ -192,6 +193,15 @@ function makeList(className, title, items) {
   `
 }
 
+async function fileExists(filePath) {
+	try {
+		const res = await fetch(filePath, { method: "HEAD" })
+		return res.ok
+	} catch {
+		return false
+	}
+}
+
 /**
  * Fetch exercise using relative path
  *
@@ -213,8 +223,21 @@ async function getRawExerciseData(basePath) {
 	}
 }
 
-function renderBanner(data, basePath) {
-	bannerImg.setAttribute("src", basePath + "banner.jpg")
+async function renderBanner(data, basePath) {
+	const bannerPath = basePath + "banner.jpg"
+	const avatarPath = basePath + "avatar.jpg"
+	const bannerExists = await fileExists(bannerPath)
+	const avatarExists = await fileExists(avatarPath)
+
+	bannerImg.setAttribute(
+		"src",
+		bannerExists ? bannerPath : "../../assets/default_banner.jpg"
+	)
+	bannerAvatar.setAttribute(
+		"src",
+		avatarExists ? avatarPath : "../../assets/default_avatar.png"
+	)
+
 	bannerTitle.textContent = data.title
 }
 
@@ -233,11 +256,11 @@ function renderMuscles(data) {
 	contentMusclesEl.innerHTML = primaryMuscles + secondaryMuscles
 }
 
-function loadExerciseToWindow(exerciseText, basePath) {
+async function loadExerciseToWindow(exerciseText, basePath) {
 	// parse Markdown information
 	const { data, content } = matter(exerciseText)
 
-	renderBanner(data, basePath)
+	await renderBanner(data, basePath)
 	renderMuscles(data)
 	const exerciseContentHTML = marked.parse(content)
 	contentFreeformEl.innerHTML = exerciseContentHTML
@@ -250,7 +273,7 @@ async function loadExercise(name) {
 	const exerciseText = await getRawExerciseData(basePath)
 
 	if (exerciseText !== false) {
-		loadExerciseToWindow(exerciseText, basePath)
+		await loadExerciseToWindow(exerciseText, basePath)
 		exerciseWindow.showModal()
 	}
 }
