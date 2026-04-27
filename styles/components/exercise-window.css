@@ -129,6 +129,7 @@
 
 		.card {
 			align-content: center;
+			object-fit: cover;
 			aspect-ratio: 16 / 9;
 			max-width: 300px;
 			text-align: center;
