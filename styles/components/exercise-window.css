@@ -140,6 +140,7 @@
 			border-radius: 16px;
 			scroll-snap-align: center;
 			transition: all 0.2s ease;
+			cursor: pointer;
 
 			@media (max-width: 768px) {
 				flex: 0 0 64%;
