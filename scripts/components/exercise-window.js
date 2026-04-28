@@ -276,7 +276,7 @@ function closeExerciseWindow() {
 
 // verify an exercise exists and renders it to the screen
 async function loadExercise(name) {
-	if (!name) closeExerciseWindow()
+	if (!name) return closeExerciseWindow()
 
 	const basePath = `../../exercises/${name}/`
 	const exerciseText = await getRawExerciseData(basePath)
@@ -296,5 +296,17 @@ async function handleRoute() {
 window.addEventListener("hashchange", handleRoute)
 window.addEventListener("DOMContentLoaded", handleRoute)
 
-exerciseWindowBackButton.addEventListener("click", () => history.back())
-exerciseWindow.addEventListener("close", () => history.back())
+let alreadyWentBack = false
+
+exerciseWindowBackButton.addEventListener("click", () => {
+	alreadyWentBack = true
+	history.back()
+})
+exerciseWindow.addEventListener("close", () => {
+	if (alreadyWentBack) {
+		alreadyWentBack = false
+		return
+	}
+
+	history.back()
+})
