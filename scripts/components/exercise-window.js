@@ -2,7 +2,7 @@ import { marked } from "https://esm.sh/marked"
 import matter from "https://esm.sh/gray-matter"
 
 const exerciseWindow = document.querySelector("#exercise-window")
-const exerciseWindowCloseButton = exerciseWindow.querySelector(".close-button")
+const exerciseWindowBackButton = exerciseWindow.querySelector(".back-button")
 const bannerTitle = exerciseWindow.querySelector(".banner .title")
 const bannerImg = exerciseWindow.querySelector(".banner img")
 const bannerAvatar = exerciseWindow.querySelector(".banner .avatar img")
@@ -225,7 +225,7 @@ async function getRawExerciseData(basePath) {
 
 async function renderBanner(data, basePath) {
 	const bannerPath = basePath + "banner.jpg"
-	const avatarPath = basePath + "avatar.jpg"
+	const avatarPath = basePath + "avatar.png"
 	const bannerExists = await fileExists(bannerPath)
 	const avatarExists = await fileExists(avatarPath)
 
@@ -267,30 +267,28 @@ async function loadExerciseToWindow(exerciseText, basePath) {
 	renderCarouselVideos(data.videos)
 }
 
+// ################ Client-side Routing
+// Read changes in the website's hash to load a particular exercise
+
+function closeExerciseWindow() {
+	if (exerciseWindow.open) exerciseWindow.close()
+}
+
 // verify an exercise exists and renders it to the screen
 async function loadExercise(name) {
+	if (!name) closeExerciseWindow()
+
 	const basePath = `../../exercises/${name}/`
-	const exerciseText = await getRawExerciseData(basePath)
+	const exerciseText = getRawExerciseData(basePath)
 
 	if (exerciseText !== false) {
 		await loadExerciseToWindow(exerciseText, basePath)
 		exerciseWindow.showModal()
-	}
+	} else closeExerciseWindow()
 }
 
-exerciseWindowCloseButton.addEventListener("click", () => {
-	exerciseWindow.close()
-})
-
-// ################ Client-side Routing
-// Read changes in the website's hash to load a particular exercise
-
-/**
- * Check if hash is not empty in order to load an exercise
- * */
 async function handleRoute() {
 	const hash = window.location.hash.slice(1)
-	if (!hash) return
 
 	await loadExercise(hash)
 }
@@ -298,11 +296,5 @@ async function handleRoute() {
 window.addEventListener("hashchange", handleRoute)
 window.addEventListener("DOMContentLoaded", handleRoute)
 
-// removes the exercise from the hash without reloading the website
-exerciseWindow.addEventListener("close", () => {
-	history.pushState(
-		"",
-		document.title,
-		window.location.pathname + window.location.search
-	)
-})
+exerciseWindowBackButton.addEventListener("click", () => history.back())
+exerciseWindow.addEventListener("close", () => history.back())
