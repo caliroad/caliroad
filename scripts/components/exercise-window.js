@@ -284,7 +284,7 @@ async function loadExercise(name) {
 	if (exerciseText !== false) {
 		await loadExerciseToWindow(exerciseText, basePath)
 		exerciseWindow.showModal()
-	} else closeExerciseWindow()
+	} else history.back()
 }
 
 async function handleRoute() {
