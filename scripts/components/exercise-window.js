@@ -279,7 +279,7 @@ async function loadExercise(name) {
 	if (!name) closeExerciseWindow()
 
 	const basePath = `../../exercises/${name}/`
-	const exerciseText = getRawExerciseData(basePath)
+	const exerciseText = await getRawExerciseData(basePath)
 
 	if (exerciseText !== false) {
 		await loadExerciseToWindow(exerciseText, basePath)
