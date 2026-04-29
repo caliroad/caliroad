@@ -271,7 +271,10 @@ async function loadExerciseToWindow(exerciseText, basePath) {
 // Read changes in the website's hash to load a particular exercise
 
 function closeExerciseWindow() {
-	if (exerciseWindow.open) exerciseWindow.close()
+	if (exerciseWindow.open) {
+		document.title = "Caliroad"
+		exerciseWindow.close()
+	}
 }
 
 // verify an exercise exists and renders it to the screen
@@ -282,6 +285,8 @@ async function loadExercise(name) {
 	const exerciseText = await getRawExerciseData(basePath)
 
 	if (exerciseText !== false) {
+		const exerciseNameCapitalized = name[0].toUpperCase() + name.slice(1)
+		document.title = `Caliroad | ${exerciseNameCapitalized}`
 		await loadExerciseToWindow(exerciseText, basePath)
 		exerciseWindow.showModal()
 	} else history.back()
