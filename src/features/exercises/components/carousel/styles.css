@@ -1,0 +1,183 @@
+#exercise-window .content .carousel-container {
+	position: relative;
+	width: 90%;
+	margin-top: 24px;
+}
+
+#exercise-window .content .carousel-container .slide-panel {
+	position: relative;
+	display: flex;
+	align-items: center;
+	background: none;
+
+	.carousel {
+		display: flex;
+		gap: 1em;
+		width: 100%;
+		overflow-x: auto;
+		padding: 8px;
+
+		scroll-behavior: smooth;
+		scroll-snap-type: x mandatory;
+		scroll-padding: 0 1em;
+
+		/* Firefox */
+		scrollbar-width: none;
+
+		/* Chrome/Safari */
+		&::-webkit-scrollbar {
+			display: none;
+		}
+
+		.card {
+			position: relative;
+			align-content: center;
+			aspect-ratio: 16 / 9;
+			flex: 0 0 300px;
+			text-align: center;
+			background-color: var(--bg-surface);
+			border: 2px solid var(--fg-text);
+			border-radius: 16px;
+			scroll-snap-align: center;
+			transition: all 0.2s ease;
+			cursor: pointer;
+			overflow: hidden;
+
+			@media (max-width: 768px) {
+				flex: 0 0 64%;
+				aspect-ratio: 2 / 1;
+			}
+
+			&:hover {
+				transform: scale(1.05);
+			}
+
+			.thumbnail {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				border-radius: 16px;
+			}
+
+			.title {
+				position: absolute;
+				top: 8px;
+				left: 8px;
+				text-align: left;
+				color: #fffaeb;
+				text-shadow: 2px 2px 2px black;
+				font-size: 1rem;
+				font-weight: bold;
+			}
+
+			&.skeleton {
+				/* creates a moving highlight over the surface color */
+				background: linear-gradient(
+					90deg,
+					var(--bg-surface) 0%,
+					rgba(255, 255, 255, 0.08) 50%,
+					var(--bg-surface) 100%
+				);
+				background-size: 200% 100%;
+				animation: shimmer 1.5s infinite linear;
+				cursor: default;
+				/* hide the border while loading */
+				border-color: transparent;
+
+				&:hover {
+					/* disable the scale effect while loading */
+					transform: none;
+				}
+
+				.thumbnail,
+				.title {
+					opacity: 0;
+				}
+			}
+
+			&.loaded {
+				.thumbnail,
+				.title {
+					animation: fadeUpIn 0.5s ease-out forwards;
+				}
+
+				.title {
+					opacity: 0;
+					animation-delay: 0.15s;
+				}
+			}
+		}
+	}
+
+	.nav-btn {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		z-index: 10;
+
+		cursor: pointer;
+		border-radius: 50%;
+		width: 32px;
+		height: 32px;
+		line-height: 1;
+		font-weight: bold;
+		color: var(--bg-base);
+		background-color: var(--fg-subtext);
+
+		&:hover {
+			background-color: var(--fg-text);
+		}
+
+		&.prev {
+			left: 0;
+			transform: translate(-50%, -50%) rotate(180deg);
+			display: inline-block;
+		}
+
+		&.next {
+			right: 0;
+			transform: translate(50%, -50%);
+		}
+	}
+}
+
+#exercise-window .content .carousel-container .scroll-markers {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+	padding: 10px;
+	margin-top: 8px;
+
+	.marker {
+		padding: 8px;
+		border-radius: 50%;
+		background-color: var(--bg-overlay);
+		text-decoration: none;
+		transition: all 0.2s ease;
+
+		&.active {
+			background-color: var(--fg-subtext);
+			transform: scale(1.2);
+		}
+	}
+}
+
+@keyframes shimmer {
+	0% {
+		background-position: 200% 0;
+	}
+	100% {
+		background-position: -200% 0;
+	}
+}
+
+@keyframes fadeUpIn {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

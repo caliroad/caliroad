@@ -1,0 +1,33 @@
+@import "@shared/styles/dialog.css";
+
+#info-popup {
+	border: 2px solid var(--fg-subtext);
+	border-radius: 8px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+	background-color: var(--bg-surface);
+
+	.popup-inner {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 32px 24px;
+	}
+
+	.popup-title {
+		font-family: "Ekatori";
+		font-weight: bold;
+		font-size: 2rem;
+	}
+
+	.popup-subtitle {
+		font-style: italic;
+		color: var(--fg-subtext);
+		margin-bottom: 24px;
+		text-align: center;
+	}
+
+	li {
+		margin: 8px 0px;
+	}
+}

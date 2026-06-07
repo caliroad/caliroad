@@ -1,0 +1,21 @@
+:root {
+	color-scheme: light;
+
+	--bg-base: #fffaeb;
+	--bg-surface: #e6e3d7;
+	--bg-overlay: #cecbc0;
+
+	--fg-text: #0c0613;
+	--fg-subtext: #555;
+}
+
+[data-theme="dark"] {
+	color-scheme: dark;
+
+	--bg-base: #0c0613;
+	--bg-surface: #130a1e;
+	--bg-overlay: #1c0e2c;
+
+	--fg-text: #fffaeb;
+	--fg-subtext: #ddd;
+}

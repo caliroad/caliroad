@@ -1,0 +1,28 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".",
+		"checkJs": true,
+		"paths": {
+			"@app/*": [
+				"src/app/*"
+			],
+			"@features/*": [
+				"src/features/*"
+			],
+			"@shared/*": [
+				"src/shared/*"
+			]
+		},
+		"module": "ESNext",
+		"moduleResolution": "Bundler",
+		"target": "ESNext",
+		"types": [
+			"vite/client"
+		],
+		"skipLibCheck": true
+	},
+	"exclude": [
+		"node_modules",
+		"dist"
+	]
+}

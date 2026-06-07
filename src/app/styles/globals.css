@@ -1,0 +1,21 @@
+@font-face {
+	font-family: "Ekatori";
+	src: url("../assets/fonts/Ekatori.woff2") format("woff2");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Questrial";
+	src: url("../assets/fonts/Questrial.woff2") format("woff2");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+body {
+	background-color: var(--bg-base);
+	color: var(--fg-text);
+	font-family: "Questrial", Helvetica, sans-serif;
+}

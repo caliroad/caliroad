@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<!-- SEO -->
+		<title>Caliroad</title>
+		<meta name="description" content="The visual encyclopedia of Calisthenics exercises" />
+		<link rel="icon" type="image/x-icon" href="./shared/assets/logo.png" />
+
+		<!-- Scripts -->
+		<script src="https://unpkg.com/external-svg-loader@1.0.0/svg-loader.min.js" defer></script>
+		<script defer type="module" src="./app/main.js"></script>
+	</head>
+	<body>
+		<header>
+			<button id="search" class="text-button">Search</button>
+
+			<a class="logo" href="#planche">
+				<img src="./shared/assets/logo.png" alt="Caliroad logo" />
+				<p>Caliroad</p>
+			</a>
+
+			<button id="filter" class="text-button">Filter</button>
+		</header>
+
+		<main></main>
+
+		<footer>
+			<div class="settings">
+				<button id="settings-button" class="icon-button" title="Settings">
+					<svg data-src="./shared/assets/cogwheel.svg"></svg>
+				</button>
+			</div>
+
+			<p>Made with ❤️ by <a href="https://github.com/pocco81">Pocco81</a></p>
+
+			<button id="info-button" class="icon-button" title="Info">
+				<svg data-src="./shared/assets/info.svg"></svg>
+			</button>
+		</footer>
+	</body>
+</html>

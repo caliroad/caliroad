@@ -1,0 +1,16 @@
+#exercise-window .content .muscles {
+	display: flex;
+	justify-content: space-evenly;
+	width: 90%;
+	gap: 24px;
+
+	list-style-position: inside;
+	padding: 16px;
+	margin-bottom: 16px;
+	border-radius: 8px;
+	border: 2px solid var(--fg-subtext);
+
+	h3 {
+		margin-bottom: 8px;
+	}
+}
