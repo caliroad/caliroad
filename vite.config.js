@@ -4,6 +4,10 @@ import path from "path"
 export default defineConfig({
 	root: "./src",
 
+	server: {
+		open: true,
+	},
+
 	build: {
 		outDir: "../dist",
 		emptyOutDir: true,
