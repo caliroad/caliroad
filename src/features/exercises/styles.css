@@ -16,7 +16,8 @@
 		display: inline-block;
 	}
 
-	@media (max-width: 768px) {
+	@media screen and (max-width: 768px),
+		screen and (orientation: landscape) and (pointer: coarse) and (max-width: 860px) {
 		width: 100vw;
 		height: 100vh;
 		max-width: none;
