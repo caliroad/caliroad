@@ -5,7 +5,7 @@ document.body.insertAdjacentHTML("beforeend", settingsTemplate)
 
 const button = document.getElementById("settings-button")
 const settingsMenu = document.getElementById("settings-menu")
-const root = document.documentElement
+const optionsContainer = document.getElementById("options-container")
 
 button.setAttribute("popovertarget", "settings-menu")
 
@@ -17,39 +17,10 @@ button.addEventListener("click", () => {
 	})
 })
 
-/** @type {HTMLInputElement} */
-const settingsMenuDarkModeToggle = settingsMenu.querySelector("#dark-mode-toggle input")
-/** @type {HTMLInputElement} */
-const settingsMenuPreferencesToggle = settingsMenu.querySelector("#preferences-toggle input")
+export function registerSetting(settingConfig) {
+	optionsContainer.insertAdjacentHTML("beforeend", settingConfig.template)
 
-settingsMenuDarkModeToggle.addEventListener("change", () => {
-	let isChecked = settingsMenuDarkModeToggle.checked
-	let newTheme = isChecked ? "dark" : "light"
-	let savePreferences = localStorage.getItem("savePreferences") !== null
-
-	if (savePreferences) {
-		localStorage.setItem("savedTheme", newTheme)
+	if (settingConfig.init) {
+		settingConfig.init(optionsContainer)
 	}
-
-	root.dataset.theme = newTheme
-})
-
-settingsMenuPreferencesToggle.addEventListener("change", () => {
-	let isChecked = settingsMenuPreferencesToggle.checked
-
-	if (isChecked) {
-		localStorage.setItem("savePreferences", "")
-		localStorage.setItem("savedTheme", root.dataset.theme)
-	} else {
-		localStorage.removeItem("savePreferences")
-	}
-})
-
-function syncSettingsUI() {
-	settingsMenuDarkModeToggle.checked = root.dataset.theme === "dark"
-	settingsMenuPreferencesToggle.checked = localStorage.getItem("savePreferences") !== null
 }
-
-window.addEventListener("themechange", syncSettingsUI)
-
-syncSettingsUI()
