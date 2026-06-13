@@ -17,6 +17,12 @@ button.addEventListener("click", () => {
 	})
 })
 
+window.addEventListener("fullscreenchange", () => {
+	if (!document.fullscreenElement) {
+		settingsMenu.hidePopover()
+	}
+})
+
 export function registerSetting(settingConfig) {
 	optionsContainer.insertAdjacentHTML("beforeend", settingConfig.template)
 
