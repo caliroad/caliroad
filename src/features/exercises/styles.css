@@ -12,6 +12,7 @@
 
 	.back-button {
 		left: 10px;
+		top: max(10px, env(safe-area-inset-top));
 		transform: rotate(180deg);
 		display: inline-block;
 	}
