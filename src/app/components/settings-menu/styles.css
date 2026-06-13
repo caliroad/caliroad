@@ -36,10 +36,10 @@
 		}
 	}
 
-	.options-container {
+	#options-container {
 		display: flex;
 		flex-direction: column;
-		gap: 8px;
+		gap: 0.4rem;
 	}
 }
 
