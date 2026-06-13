@@ -7,7 +7,7 @@ function buildAvatarImages(exerciseIds) {
 
 	return exerciseIds
 		.map((id) => {
-			const imgPath = new URL(`../../data/${id}/avatar.png`, import.meta.url).href
+			const imgPath = new URL(`/shared/data/${id}/avatar.png`, import.meta.url).href
 
 			return `
             <a href="#${id}" class="avatar-link">
