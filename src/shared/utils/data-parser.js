@@ -3,7 +3,7 @@ import { marked } from "marked"
 
 // ################ Vite Build-Time Bundling
 // Bundle all exercise text and images into these objects
-const exerciseMarkdownFiles = import.meta.glob("../data/**/exercise.md", {
+export const exerciseMarkdownFiles = import.meta.glob("../data/**/exercise.md", {
 	query: "?raw",
 	import: "default",
 	eager: true,

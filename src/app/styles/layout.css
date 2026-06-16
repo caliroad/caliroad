@@ -37,6 +37,7 @@ header {
 
 main {
 	height: 100%;
+	position: relative;
 }
 
 footer {

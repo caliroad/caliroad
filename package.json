@@ -12,6 +12,7 @@
     "vite": "^8.0.12"
   },
   "dependencies": {
+    "force-graph": "^1.51.4",
     "front-matter": "^4.0.2",
     "marked": "^18.0.5"
   }
