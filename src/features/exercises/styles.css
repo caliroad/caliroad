@@ -10,13 +10,6 @@
 	overflow: auto;
 	transition: all 0.4s ease;
 
-	.back-button {
-		left: 10px;
-		top: max(10px, env(safe-area-inset-top));
-		transform: rotate(180deg);
-		display: inline-block;
-	}
-
 	@media screen and (max-width: 768px),
 		screen and (orientation: landscape) and (pointer: coarse) and (max-width: 860px) {
 		width: 100vw;
@@ -26,6 +19,16 @@
 		border: none;
 		border-radius: none;
 		margin: 0;
+	}
+}
+
+#exercise-window,
+#exercise-window[open] {
+	.back-button {
+		left: 10px;
+		top: max(10px, env(safe-area-inset-top));
+		transform: rotate(180deg);
+		display: inline-block;
 	}
 }
 
