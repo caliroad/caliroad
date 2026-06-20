@@ -1,21 +1,32 @@
 :root {
-	color-scheme: light;
+	/* light theme palette */
+	--light-bg-base: #fffaeb;
+	--light-bg-surface: #e6e3d7;
+	--light-bg-overlay: #cecbc0;
+	--light-fg-text: #0c0613;
+	--light-fg-subtext: #555;
 
-	--bg-base: #fffaeb;
-	--bg-surface: #e6e3d7;
-	--bg-overlay: #cecbc0;
+	/* dark theme palette */
+	--dark-bg-base: #0c0613;
+	--dark-bg-surface: #1c0e2b;
+	--dark-bg-overlay: #32194d;
+	--dark-fg-text: #fffaeb;
+	--dark-fg-subtext: #ddd;
 
-	--fg-text: #0c0613;
-	--fg-subtext: #555;
+	/* default active theme */
+	--bg-base: var(--light-bg-base);
+	--bg-surface: var(--light-bg-surface);
+	--bg-overlay: var(--light-bg-overlay);
+	--fg-text: var(--light-fg-text);
+	--fg-subtext: var(--light-fg-subtext);
 }
 
 [data-theme="dark"] {
 	color-scheme: dark;
 
-	--bg-base: #0c0613;
-	--bg-surface: #1c0e2b;
-	--bg-overlay: #32194d;
-
-	--fg-text: #fffaeb;
-	--fg-subtext: #ddd;
+	--bg-base: var(--dark-bg-base);
+	--bg-surface: var(--dark-bg-surface);
+	--bg-overlay: var(--dark-bg-overlay);
+	--fg-text: var(--dark-fg-text);
+	--fg-subtext: var(--dark-fg-subtext);
 }
