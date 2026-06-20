@@ -1,4 +1,5 @@
 import { defineConfig } from "vite"
+import buildGraphDataPlugin from "./src/features/force-graph/build/vite-plugin-graph-data"
 import path from "path"
 
 export default defineConfig({
@@ -12,6 +13,8 @@ export default defineConfig({
 		outDir: "../dist",
 		emptyOutDir: true,
 	},
+
+	plugins: [buildGraphDataPlugin()],
 
 	resolve: {
 		alias: {

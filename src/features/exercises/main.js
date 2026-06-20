@@ -6,7 +6,7 @@ const parser = new DOMParser()
 const doc = parser.parseFromString(windowTemplate, "text/html")
 const dialogInnerSkeleton = doc.querySelector("#exercise-window").innerHTML
 
-import { getExerciseData } from "@shared/utils/data-parser.js"
+import { getExerciseData } from "@shared/utils/data-fetcher.js"
 import { renderBanner } from "./components/banner/main.js"
 import { renderVariations } from "./components/variations/main.js"
 import { renderMuscles } from "./components/muscles/main.js"

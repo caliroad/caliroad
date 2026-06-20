@@ -1,66 +1,43 @@
 import "./styles.css"
 import forceGraphTemplate from "./template.html?raw"
+import ForceGraph from "force-graph"
 
 document.querySelector("main").insertAdjacentHTML("beforeend", forceGraphTemplate)
 const graphContainer = document.getElementById("force-graph")
-import ForceGraph from "force-graph"
 
-import { exerciseMarkdownFiles, getExerciseData } from "@shared/utils/data-parser"
-const exerciseNames = Object.keys(exerciseMarkdownFiles).map((path) => {
-	const pathParts = path.split("/")
-	return pathParts[pathParts.length - 2]
+import rawGraphData from "virtual:graph-data"
+
+const hydratedNodes = rawGraphData.nodes.map((node) => {
+	const img = new Image()
+	img.src = node.img
+
+	return {
+		...node,
+		img,
+	}
 })
 
-let graphData = {
-	nodes: [],
-	links: [],
-}
-
-const seenLinks = new Set()
-
-// construct the graphData based on the variations in each exercise
-for (const exercise of exerciseNames) {
-	const exerciseData = getExerciseData(exercise)
-
-	const img = new Image()
-	img.src = exerciseData.assets.avatarUrl
-
-	graphData.nodes.push({
-		id: exerciseData.name,
-		img: img,
-	})
-
-	let variations = [...(exerciseData.attributes?.progressions || []), ...(exerciseData.attributes?.regressions || [])]
-
-	for (const variation of variations) {
-		const linkFingerprint = [exerciseData.name, variation].sort().join("::")
-
-		if (seenLinks.has(linkFingerprint)) continue
-
-		seenLinks.add(linkFingerprint)
-
-		graphData.links.push({
-			source: exerciseData.name,
-			target: variation,
-		})
-	}
+const graphData = {
+	nodes: hydratedNodes,
+	links: rawGraphData.links,
 }
 
 const BODY_STYLES = getComputedStyle(document.body)
 const TEXT_COLOR = BODY_STYLES.color
 const NODE_SIZE = 12
+const ZOOM = [2, 8]
 
 let hoveredNode = null
 
 const graph = new ForceGraph(document.getElementById("force-graph"))
 	.graphData(graphData)
-	.zoom(5)
-	.minZoom(1)
-	.maxZoom(8)
+	.zoom((ZOOM[0] + ZOOM[1]) / 2)
+	.minZoom(ZOOM[0])
+	.maxZoom(ZOOM[1])
 	.nodeLabel((node) => `<strong>${node.id}</strong>`)
-	.nodeCanvasObjectMode(() => "replace") // Replaces the default sphere/circle
+	.nodeCanvasObjectMode(() => "replace") // replaces the default sphere/circle
 	.nodeVal(NODE_SIZE / 4) // hitbox radius
-	.linkColor(TEXT_COLOR)
+	.linkColor(() => TEXT_COLOR)
 	.nodeCanvasObject((node, ctx, globalScale) => {
 		let label = node.id.toString()
 		const fontSize = 20 / globalScale
@@ -109,7 +86,7 @@ function goToExercise(node) {
 
 /*
  * Check if the browser is Brave Browser using Brave's official API and
- * check if the user is using a Mobile device */
+ * check if the user is using a mobile device */
 async function isBraveMobile() {
 	// @ts-ignore
 	const isBrave = !!(navigator.brave && (await navigator.brave.isBrave()))
@@ -163,6 +140,8 @@ if (!isBraveMobile()) {
 
 			if (clickedNode) {
 				// prevent double-firing if the native click also happens to work
+				// this could happen if the user had disabled the Fingerprint Protection
+				// shield in Brave Browser Mobile's settings
 				e.preventDefault()
 				goToExercise(clickedNode)
 			}
