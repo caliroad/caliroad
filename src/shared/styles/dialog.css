@@ -2,7 +2,7 @@ dialog {
 	position: relative;
 	margin: auto;
 
-	background-color: var(--bg-base);
+	background-color: var(--bg-surface);
 
 	opacity: 0;
 	transform: scale(0.9) translateY(20px);
