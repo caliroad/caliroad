@@ -26,14 +26,14 @@
 		font-size: 4rem;
 		text-decoration: underline;
 		cursor: default;
-		color: #fffaeb;
+		color: var(--light-bg-base);
 	}
 
 	.avatar {
 		width: 22%;
 		aspect-ratio: 1 / 1;
 		border-radius: 50%;
-		border: 4px solid #fffaeb;
+		border: 4px solid var(--light-bg-base);
 
 		position: absolute;
 		bottom: 0;
