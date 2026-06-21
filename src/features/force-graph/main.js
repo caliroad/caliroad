@@ -22,8 +22,16 @@ const graphData = {
 	links: rawGraphData.links,
 }
 
-const BODY_STYLES = getComputedStyle(document.body)
-const TEXT_COLOR = BODY_STYLES.color
+let TEXT_COLOR
+let BORDER_COLOR
+
+function updateStyles() {
+	const BODY_STYLES = getComputedStyle(document.body)
+	TEXT_COLOR = BODY_STYLES.color
+	BORDER_COLOR = BODY_STYLES.getPropertyValue("--light-bg-base").trim()
+}
+
+updateStyles()
 const NODE_SIZE = 12
 const ZOOM = [2, 8]
 
@@ -54,7 +62,7 @@ const graph = new ForceGraph(document.getElementById("force-graph"))
 
 			ctx.arc(node.x, node.y, NODE_SIZE / 2, 0, 2 * Math.PI, false)
 
-			ctx.strokeStyle = TEXT_COLOR
+			ctx.strokeStyle = BORDER_COLOR
 			ctx.lineWidth = 3 / globalScale
 			ctx.stroke()
 			ctx.restore()
@@ -69,6 +77,9 @@ const graph = new ForceGraph(document.getElementById("force-graph"))
 	.onNodeHover((node) => {
 		hoveredNode = node
 	})
+
+window.addEventListener("auto-themechange", updateStyles)
+window.addEventListener("manual-themechange", updateStyles)
 
 function goToExercise(node) {
 	const exercise = node.id.toString()

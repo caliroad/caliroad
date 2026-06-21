@@ -13,7 +13,7 @@ function setCurrentThemePreference() {
 
 	root.dataset.theme = newTheme
 
-	window.dispatchEvent(new Event("themechange"))
+	window.dispatchEvent(new Event("auto-themechange"))
 }
 
 setCurrentThemePreference()

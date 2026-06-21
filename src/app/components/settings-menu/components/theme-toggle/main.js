@@ -17,13 +17,14 @@ export const themeToggleConfig = {
 			}
 
 			root.dataset.theme = newTheme
+			window.dispatchEvent(new Event("manual-themechange"))
 		})
 
 		function syncUI() {
 			toggle.checked = root.dataset.theme === "dark"
 		}
 
-		window.addEventListener("themechange", syncUI)
+		window.addEventListener("auto-themechange", syncUI)
 		syncUI()
 	},
 }
