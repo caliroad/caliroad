@@ -14,7 +14,7 @@ document.addEventListener("visibilitychange", () => {
 	}
 })
 
-// pause all CSS animations when the page is not focused
+// pause animations when the page is not focused
 window.addEventListener("blur", () => {
 	meshBackground.classList.add("paused")
 })
@@ -24,3 +24,10 @@ window.addEventListener("focus", () => {
 		meshBackground.classList.remove("paused")
 	}
 })
+
+// pause animations if the user prefers reduced motion
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)")
+
+if (prefersReducedMotion) {
+	meshBackground.classList.add("paused")
+}
