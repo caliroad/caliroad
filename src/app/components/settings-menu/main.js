@@ -1,6 +1,10 @@
 import "./styles.css"
 import settingsTemplate from "./template.html?raw"
 
+import { themeToggleConfig } from "./components/theme-toggle/main.js"
+import { preferencesToggleConfig } from "./components/preferences/main.js"
+import { fullscreenToggleConfig } from "./components/fullscreen/main.js"
+
 document.body.insertAdjacentHTML("beforeend", settingsTemplate)
 
 const button = document.getElementById("settings-button")
@@ -30,3 +34,7 @@ export function registerSetting(settingConfig) {
 		settingConfig.init(optionsContainer)
 	}
 }
+
+registerSetting(themeToggleConfig)
+registerSetting(fullscreenToggleConfig)
+registerSetting(preferencesToggleConfig)
