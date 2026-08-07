@@ -6,7 +6,7 @@ export const exerciseMarkdownFiles = import.meta.glob("../data/**/exercise.md", 
 	eager: true,
 })
 
-const exerciseImages = import.meta.glob("../data/**/*.{png,jpg,jpeg,webp}", {
+export const exerciseImages = import.meta.glob("../data/**/*.{png,jpg,jpeg,webp}", {
 	import: "default",
 	eager: true,
 })

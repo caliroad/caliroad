@@ -1,6 +1,7 @@
 import "./styles.css"
 import forceGraphTemplate from "./template.html?raw"
 import ForceGraph from "force-graph"
+import { exerciseImages } from "@shared/utils/data-fetcher.js"
 
 document.querySelector("main").insertAdjacentHTML("beforeend", forceGraphTemplate)
 const graphContainer = document.getElementById("force-graph")
@@ -66,6 +67,17 @@ specialNodes.nodes.forEach((node) => {
 const hydratedNodes = rawGraphData.nodes.map((node) => {
 	const img = new Image()
 	img.src = node.img
+
+	// reconstruct the key used in your data-fetches.js glob
+	const imageKey = `../data/${node.id}/avatar.png`
+
+	// check if Vite generated a hashed URL. Fallback to node.img for safety/dev.
+	img.src = exerciseImages[imageKey] || node.img
+
+	// trigger graph refresh when image loads to repaint the image
+	img.onload = () => {
+		Graph.refresh()
+	}
 
 	return {
 		...node,
