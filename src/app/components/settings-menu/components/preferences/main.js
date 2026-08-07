@@ -12,10 +12,11 @@ export const preferencesToggleConfig = {
 
 			if (isChecked) {
 				localStorage.setItem("savePreferences", "")
-				localStorage.setItem("savedTheme", root.dataset.theme)
 			} else {
 				localStorage.removeItem("savePreferences")
 			}
+
+			window.dispatchEvent(new CustomEvent("save-preferences-change"))
 		})
 
 		function syncUI() {

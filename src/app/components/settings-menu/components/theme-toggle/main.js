@@ -1,6 +1,14 @@
 import "./styles.css"
 import template from "./template.html?raw"
 
+function savePreferences(value) {
+	let savePreferences = localStorage.getItem("savePreferences") !== null
+
+	if (savePreferences) {
+		localStorage.setItem("savedTheme", value)
+	}
+}
+
 export const themeToggleConfig = {
 	template: template,
 	init: (container) => {
@@ -10,11 +18,8 @@ export const themeToggleConfig = {
 		toggle.addEventListener("change", () => {
 			let isChecked = toggle.checked
 			let newTheme = isChecked ? "dark" : "light"
-			let savePreferences = localStorage.getItem("savePreferences") !== null
 
-			if (savePreferences) {
-				localStorage.setItem("savedTheme", newTheme)
-			}
+			savePreferences(newTheme)
 
 			root.dataset.theme = newTheme
 			window.dispatchEvent(new Event("manual-themechange"))
@@ -26,5 +31,6 @@ export const themeToggleConfig = {
 
 		window.addEventListener("auto-themechange", syncUI)
 		syncUI()
+		window.addEventListener("save-preferences-change", () => savePreferences(root.dataset.theme))
 	},
 }
