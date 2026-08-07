@@ -22,7 +22,7 @@ export const themeToggleConfig = {
 			savePreferences(newTheme)
 
 			root.dataset.theme = newTheme
-			window.dispatchEvent(new Event("manual-themechange"))
+			window.dispatchEvent(new CustomEvent("manual-themechange"))
 		})
 
 		function syncUI() {
