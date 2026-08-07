@@ -41,7 +41,7 @@ const specialNodes = {
 			id: "special-node-1",
 			url: "https://github.com/pocco81",
 			html: `
-				<div style="font-family:sans-serif; text-align:center; background:linear-gradient(135deg, #667eea, #764ba2); color:white; padding:12px; border-radius:8px; width:100%; height:100%; box-sizing:border-box; display:flex; flex-direction:column; justify-content:center; align-items:center; border:2px solid #fff; box-shadow:0 4px 6px rgba(0,0,0,0.15);">
+				<div style="font-family:sans-serif; text-align:center; overflow-wrap:anywhere; background:linear-gradient(135deg, #667eea, #764ba2); color:white; padding:12px; border-radius:8px; width:100%; height:100%; box-sizing:border-box; display:flex; flex-direction:column; justify-content:center; align-items:center; border:2px solid #fff; box-shadow:0 4px 6px rgba(0,0,0,0.15);">
 					<strong style="font-size:18px;">📚 Linking the app?</strong>
 					<span style="opacity:0.9; font-size:14px; margin-top:4px">Support me at github.com/pocco81</span>
 				</div>`,
