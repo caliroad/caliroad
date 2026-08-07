@@ -1,5 +1,9 @@
 import "./styles.css"
 import infoTemplate from "./template.html?raw"
+import infoSVG from "./assets/icon.svg?raw"
+
+const infoIconContainer = document.getElementById("info-icon")
+if (infoIconContainer) infoIconContainer.innerHTML = infoSVG
 
 document.body.insertAdjacentHTML("beforeend", infoTemplate)
 

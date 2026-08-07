@@ -1,5 +1,9 @@
 import "./styles.css"
 import settingsTemplate from "./template.html?raw"
+import settingsSVG from "./assets/icon.svg?raw"
+
+const settingsIconContainer = document.getElementById("settings-icon")
+if (settingsIconContainer) settingsIconContainer.innerHTML = settingsSVG
 
 import { themeToggleConfig } from "./components/theme-toggle/main.js"
 import { preferencesToggleConfig } from "./components/preferences/main.js"
