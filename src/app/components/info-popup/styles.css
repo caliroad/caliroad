@@ -17,17 +17,24 @@
 	.popup-title {
 		font-family: "Ekatori";
 		font-weight: bold;
-		font-size: 2rem;
+		font-size: 3rem;
+		text-align: center;
 	}
 
 	.popup-subtitle {
 		font-style: italic;
 		color: var(--fg-subtext);
 		margin-bottom: 24px;
+		font-size: 1.4rem;
 		text-align: center;
 	}
 
 	li {
 		margin: 8px 0px;
+		font-size: 1.1rem;
+	}
+
+	ul {
+		width: 80%;
 	}
 }

@@ -1,5 +1,6 @@
 import { defineConfig } from "vite"
 import buildGraphDataPlugin from "./src/features/force-graph/build/vite-plugin-graph-data"
+import i18nAutoScopePlugin from "./src/app/components/localization/build/vite-plugin-i18n-auto-scope"
 import path from "path"
 
 export default defineConfig({
@@ -14,7 +15,7 @@ export default defineConfig({
 		emptyOutDir: true,
 	},
 
-	plugins: [buildGraphDataPlugin()],
+	plugins: [buildGraphDataPlugin(), i18nAutoScopePlugin()],
 
 	resolve: {
 		alias: {

@@ -1,0 +1,20 @@
+{
+	"en": {
+		"title": "Welcome to Caliroad!",
+		"subtitle": "The visual encyclopedia of Calisthenics exercises",
+		"tips": [
+			"Click on nodes to see the contents of an exercise",
+			"Use the filter to view relationships between exercises",
+			"Use the search bar to locate specific exercises"
+		]
+	},
+	"es": {
+		"title": "Bienvenido a Caliroad!",
+		"subtitle": "La enciclopedia visual de ejercicios de Calistenia",
+		"tips": [
+			"Haz click en nodos para ver los contenidos del ejercicio",
+			"Usa el filtro para ver relaciones entre ejercicios",
+			"Usa la barra de busqueda para localizar ejercicios especifícos"
+		]
+	}
+}

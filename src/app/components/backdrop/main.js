@@ -37,8 +37,9 @@ let savePreferences = localStorage.getItem("savePreferences") !== null
 
 if (savePreferences) {
 	let savedBackgroundAnimationState = localStorage.getItem("savedBackgroundAnimationState")
-	console.log(savedBackgroundAnimationState)
-	if (savedBackgroundAnimationState !== null) pauseAnimations(!(savedBackgroundAnimationState === "true"))
+	if (savedBackgroundAnimationState !== null) {
+		pauseAnimations(!(savedBackgroundAnimationState === "true"))
+	}
 }
 
 registerSetting(backgroundAnimationToggleConfig)

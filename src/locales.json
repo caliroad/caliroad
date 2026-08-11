@@ -1,0 +1,20 @@
+{
+	"en": {
+		"search": "Search",
+		"filter": "Filter",
+		"footer": {
+			"settings": "Settings",
+			"info": "Info",
+			"phrase": "Made with ❤️ by"
+		}
+	},
+	"es": {
+		"search": "Buscar",
+		"filter": "Filtrar",
+		"footer": {
+			"settings": "Ajustes",
+			"info": "Información",
+			"phrase": "Hecho con ❤️ por"
+		}
+	}
+}

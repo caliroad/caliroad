@@ -2,32 +2,37 @@ import "./styles.css"
 import musclesTemplate from "./template.html?raw"
 import { queryReplace } from "@shared/utils/query-replace"
 
-function makeList(className, title, items) {
-	if (!items) return ""
-	return `
-      <div class="${className}">
-        <h3>${title}</h3>
-        <ul>
-          ${items.map((item) => `<li>${item}</li>`).join("")}
-        </ul>
-      </div>
-    `
+function populateList(container, items) {
+	if (!container) return
+
+	const section = container.closest("div")
+
+	// hide the section if there are no items for this category
+	if (!items || items.length === 0) {
+		if (section) section.style.display = "none"
+		container.innerHTML = ""
+		return
+	}
+
+	if (section) section.style.display = ""
+	container.innerHTML = items.map((item) => `<li>${item}</li>`).join("")
 }
 
 export function renderMuscles(data) {
 	queryReplace("#muscles-placeholder", musclesTemplate)
 
-	const contentMusclesEl = document.querySelector(".content .muscles")
+	const rootEl = document.querySelector(".content .muscles")
 
-	if (!contentMusclesEl) {
+	if (!rootEl) {
 		console.warn("Muscles target container element not found in the DOM.")
 		return
 	}
 
 	if (!data) return
 
-	const primaryMuscles = makeList("primary-muscles", "Primary Muscles", data["primary-muscles"])
-	const secondaryMuscles = makeList("secondary-muscles", "Secondary Muscles", data["secondary-muscles"])
+	const primaryList = rootEl.querySelector(".primary-list")
+	const secondaryList = rootEl.querySelector(".secondary-list")
 
-	contentMusclesEl.innerHTML = primaryMuscles + secondaryMuscles
+	populateList(primaryList, data["primary-muscles"])
+	populateList(secondaryList, data["secondary-muscles"])
 }

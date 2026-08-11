@@ -4,6 +4,7 @@ import "./styles/main.css"
 
 import "@features/force-graph/main.js"
 import "./components/backdrop/main.js"
+import "./components/localization/main.js"
 import "./components/info-popup/main.js"
 import "./components/settings-menu/main.js"
 
