@@ -2,6 +2,8 @@ import "./styles.css"
 import musclesTemplate from "./template.html?raw"
 import { queryReplace } from "@shared/utils/query-replace"
 
+import { renderMusclesDiagram } from "@features/muscles-diagram/main"
+
 function populateList(container, items) {
 	if (!container) return
 
@@ -20,6 +22,7 @@ function populateList(container, items) {
 
 export function renderMuscles(data) {
 	queryReplace("#muscles-placeholder", musclesTemplate)
+	renderMusclesDiagram("#muscles-diagram-placeholder")
 
 	const rootEl = document.querySelector(".content .muscles")
 
@@ -30,8 +33,8 @@ export function renderMuscles(data) {
 
 	if (!data) return
 
-	const primaryList = rootEl.querySelector(".primary-list")
-	const secondaryList = rootEl.querySelector(".secondary-list")
+	const primaryList = rootEl.querySelector(".text-chart .primary-list")
+	const secondaryList = rootEl.querySelector(".text-chart .secondary-list")
 
 	populateList(primaryList, data["primary-muscles"])
 	populateList(secondaryList, data["secondary-muscles"])

@@ -1,5 +1,7 @@
 ---
 title: Manna
+regressions: ["planche"]
+progressions: ["planche"]
 primary-muscles: ["Posterior Deltoids", "Triceps", "Latissimus Dorsi"]
 secondary-muscles: ["Anterior core muscles"]
 videos:

@@ -1,7 +1,6 @@
 #exercise-window .content .variations {
 	height: 100px;
 	width: 80%;
-	margin-bottom: 24px;
 
 	display: flex;
 	gap: 16px;

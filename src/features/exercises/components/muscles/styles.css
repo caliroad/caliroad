@@ -1,16 +1,27 @@
-#exercise-window .content .muscles {
+#exercise-window .content .muscles .text-chart {
 	display: flex;
 	justify-content: space-evenly;
-	width: 90%;
 	gap: 24px;
 
 	list-style-position: inside;
 	padding: 16px;
-	margin-bottom: 16px;
+	margin: 16px 0px;
 	border-radius: 8px;
 	border: 2px solid var(--fg-subtext);
 
 	h3 {
 		margin-bottom: 8px;
+	}
+}
+
+#exercise-window .content .muscles {
+	width: 90%;
+}
+
+#muscles-diagram {
+	height: 400px;
+
+	@media (max-width: 768px) {
+		height: 300px;
 	}
 }
