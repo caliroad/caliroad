@@ -1,4 +1,4 @@
-import "./utils/auto-theme-toggle.js"
+import "./utils/auto-theme-toggle.ts"
 
 import "./styles/main.css"
 
