@@ -8,12 +8,20 @@ import { unhyphenateCapitalize } from "@shared/utils/unhyphenate-capitalize"
 
 const TOOLTIP_OFFSET = 16
 
-function makeSVGPathHighlighter(element, tooltip) {
-	let currentHighlight = null
-	let rafId = null
+function makeSVGPathHighlighter(
+	element: SVGGraphicsElement,
+	tooltip: HTMLElement
+): {
+	mouseover: (event: MouseEvent) => void
+	mousemove: (event: MouseEvent) => void
+	mouseleave: () => void
+} {
+	let currentHighlight: SVGGraphicsElement | null = null
+	let rafId: number | null = null
 
-	function mouseover(event) {
-		const targetShape = event.target.closest("[id]")
+	function mouseover(event: MouseEvent): void {
+		const eventElement = event.target as HTMLElement
+		const targetShape = eventElement.closest("[id]") as SVGGraphicsElement
 
 		if (!targetShape || targetShape === element || targetShape === currentHighlight) return
 
@@ -30,13 +38,14 @@ function makeSVGPathHighlighter(element, tooltip) {
 		tooltip.classList.add("is-visible")
 	}
 
-	function mousemove(event) {
+	function mousemove(event: MouseEvent): void {
 		if (!currentHighlight) return
 
 		if (rafId) cancelAnimationFrame(rafId)
 
 		rafId = requestAnimationFrame(() => {
-			const parentRect = element.parentElement.getBoundingClientRect()
+			const parentRect = element.parentElement?.getBoundingClientRect()
+			if (!parentRect) return
 
 			// subtract parent layout boundaries from viewport cursor positions
 			const x = event.clientX - parentRect.left + TOOLTIP_OFFSET
@@ -46,7 +55,7 @@ function makeSVGPathHighlighter(element, tooltip) {
 		})
 	}
 
-	function mouseleave() {
+	function mouseleave(): void {
 		if (currentHighlight) {
 			currentHighlight.classList.remove("is-highlighted")
 			currentHighlight = null
@@ -58,7 +67,7 @@ function makeSVGPathHighlighter(element, tooltip) {
 	return { mouseover, mousemove, mouseleave }
 }
 
-function clampBoundingBox(muscleDiagram) {
+function clampBoundingBox(muscleDiagram: SVGGraphicsElement): void {
 	// target the main content group inside the SVG
 	const contentGroup = muscleDiagram.querySelector("g") || muscleDiagram
 	const bbox = contentGroup.getBBox()
@@ -69,7 +78,7 @@ function clampBoundingBox(muscleDiagram) {
 	muscleDiagram.setAttribute("viewBox", `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`)
 }
 
-function prepareDiagram(muscleDiagram, tooltip) {
+function prepareDiagram(muscleDiagram: SVGGraphicsElement, tooltip: HTMLElement): void {
 	// the height and width must be removed in order to style them from CSS
 	muscleDiagram.removeAttribute("height")
 	muscleDiagram.removeAttribute("width")
@@ -85,14 +94,16 @@ function prepareDiagram(muscleDiagram, tooltip) {
 	muscleDiagram.addEventListener("mouseleave", eventHandlers.mouseleave)
 }
 
-export function renderMusclesDiagram(replaceAt) {
+export function renderMusclesDiagram(replaceAt: string): void {
 	queryReplace(replaceAt, musclesDiagramTemplate)
 	queryReplace("#front-placeholder", frontDiagram)
 	queryReplace("#back-placeholder", backDiagram)
 
-	const musclesDiagramFront = document.querySelector("#muscles-diagram-front")
-	const musclesDiagramBack = document.querySelector("#muscles-diagram-back")
-	const tooltip = document.querySelector("#svg-tooltip")
+	const musclesDiagramFront = document.querySelector<SVGGraphicsElement>("#muscles-diagram-front")
+	const musclesDiagramBack = document.querySelector<SVGGraphicsElement>("#muscles-diagram-back")
+	const tooltip = document.getElementById("#svg-tooltip")
+
+	if (!musclesDiagramFront || !musclesDiagramBack || !tooltip) return
 
 	prepareDiagram(musclesDiagramFront, tooltip)
 	prepareDiagram(musclesDiagramBack, tooltip)
