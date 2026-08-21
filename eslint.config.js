@@ -16,12 +16,14 @@ export default [
 			"@typescript-eslint/typedef": [
 				"warn",
 				{
-					variableDeclaration: true,
+					variableDeclaration: false,
+					variableDeclarationIgnoreFunction: true,
 					memberVariableDeclaration: true,
+					parameter: true,
+					propertyDeclaration: true,
 				},
 			],
 			"@typescript-eslint/no-inferrable-types": "off",
-			"@typescript-eslint/no-explicit-any": "warn",
 		},
 	},
 ]

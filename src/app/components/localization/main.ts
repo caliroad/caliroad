@@ -1,20 +1,38 @@
-import i18n from "i18next"
+import i18n, { type InitOptions, type Resource } from "i18next"
+// @ts-expect-error loc-i18next lacks type definitions
 import locI18next from "loc-i18next"
 import LanguageDetector from "i18next-browser-languagedetector"
 import { registerSetting } from "@app/components/settings-menu/main.js"
 import { languageToggleConfig } from "./components/settings/main.js"
 
-const localeFiles = import.meta.glob("/**/locales.json", { eager: true })
-let localize
+type Dictionary<T = any> = Record<string, T>
 
-let resources = {}
+// type for the localize function returned by loc-i18next
+// prettier-ignore
+type LocalizeFn = (
+  selector: string,
+  options?: { document?: Document | Element }
+) => void;
 
-// Helper function to build deeply nested objects from an array of path segments
-function setDeepPath(targetObj, pathArray, valueObj) {
+// type for the dynamically imported locale files
+// prettier-ignore
+type LocaleModules = Dictionary<{ default?: Dictionary } & Dictionary>
+
+const localeFiles = import.meta.glob("/**/locales.json", { eager: true }) as LocaleModules
+let localize: LocalizeFn | undefined
+
+// build nested resources: { [lang]: { translation: { ... } } }
+const resources: Resource = {}
+
+/**
+ * Helper to build deeply nested objects from an array of path segments.
+ * Merges valueObj into the final object key.
+ */
+function setDeepPath(targetObj: Dictionary, pathArray: string[], valueObj: Dictionary): void {
 	let current = targetObj
 	pathArray.forEach((segment, index) => {
 		if (index === pathArray.length - 1) {
-			// Safely merge values into the final object key
+			// safely merge values into the final object key
 			current[segment] = { ...(current[segment] || {}), ...valueObj }
 		} else {
 			if (!current[segment]) current[segment] = {}
@@ -23,7 +41,7 @@ function setDeepPath(targetObj, pathArray, valueObj) {
 	})
 }
 
-// Parse file paths and inject translations deeply into the resources object
+// parse file paths and inject translations deeply into the resources object
 Object.entries(localeFiles).forEach(([filePath, fileModule]) => {
 	const componentLocales = fileModule.default || fileModule
 
@@ -39,20 +57,18 @@ Object.entries(localeFiles).forEach(([filePath, fileModule]) => {
 		if (!resources[lang]) resources[lang] = { translation: {} }
 
 		if (!cleanedPath) {
-			// ROOT locales.json -> merge directly into top-level translation object
 			resources[lang].translation = {
-				...resources[lang].translation,
+				...(resources[lang].translation as object),
 				...translations,
 			}
 		} else {
-			// COMPONENT locales.json -> nest under path hierarchy
 			const pathSegments = cleanedPath.split("/")
-			setDeepPath(resources[lang].translation, pathSegments, translations)
+			setDeepPath(resources[lang].translation as Dictionary, pathSegments, translations)
 		}
 	})
 })
 
-const I18N_CONFIG = {
+const I18N_CONFIG: InitOptions = {
 	fallbackLng: "en",
 	debug: false,
 	resources, // inject the dynamically built resources here
@@ -64,18 +80,17 @@ const I18N_CONFIG = {
 
 registerSetting(languageToggleConfig)
 
-function getBaseLocale(locale) {
+function getBaseLocale(locale: string): string {
 	return locale.split("-")[0]
 }
 
-function setLocale(locale) {
+function setLocale(locale: string | undefined): void {
 	if (!locale) return
-
 	const newLocale = getBaseLocale(locale)
 	i18n.changeLanguage(newLocale)
 }
 
-const handleLocaleUpdate = (lng) => {
+const handleLocaleUpdate = (lng: string): void => {
 	const newLocale = i18n.resolvedLanguage || getBaseLocale(lng)
 	if (localize) localize("[data-i18n]")
 
@@ -88,14 +103,14 @@ const handleLocaleUpdate = (lng) => {
 	)
 }
 
-function startDOMObserver() {
+function startDOMObserver(): void {
 	if (!localize) return
 
 	const observer = new MutationObserver((mutations) => {
 		for (const mutation of mutations) {
 			for (const node of mutation.addedNodes) {
 				if (node.nodeType !== Node.ELEMENT_NODE) continue
-				localize(":scope, [data-i18n]", { document: node })
+				if (localize) localize(":scope, [data-i18n]", { document: node as Element })
 			}
 		}
 	})
@@ -109,7 +124,7 @@ function startDOMObserver() {
 i18n.use(LanguageDetector)
 	.init(I18N_CONFIG)
 	.then(() => {
-		localize = locI18next.init(i18n)
+		localize = locI18next.init(i18n) as LocalizeFn
 		handleLocaleUpdate(i18n.language)
 		startDOMObserver()
 	})
@@ -118,16 +133,19 @@ i18n.use(LanguageDetector)
 i18n.on("languageChanged", handleLocaleUpdate)
 
 // listen to UI dropdown requests
-window.addEventListener("request-locale-change", (e) => setLocale(e.detail.locale))
+window.addEventListener("request-locale-change", (e: Event) => {
+	const customEvent = e as CustomEvent<{ locale: string }>
+	setLocale(customEvent.detail.locale)
+})
 
 // listen to browser/OS system changes
 window.addEventListener("languagechange", () => setLocale(navigator.language))
 
-let savePreferences = localStorage.getItem("savePreferences") !== null
+const savePreferences = localStorage.getItem("savePreferences") !== null
 
 if (savePreferences) {
-	let savedLocale = localStorage.getItem("savedLocale")
-	setLocale(savedLocale)
+	const savedLocale = localStorage.getItem("savedLocale")
+	setLocale(savedLocale ?? undefined)
 }
 
 export default i18n

@@ -1,24 +1,24 @@
 import "./styles.css"
 import backdropTemplate from "./template.html?raw"
-import { registerSetting } from "@app/components/settings-menu/main.js"
-import { backgroundAnimationToggleConfig } from "./components/settings/main.js"
+import { registerSetting } from "@app/components/settings-menu/main"
+import { backgroundAnimationToggleConfig } from "./components/settings/main"
 
-document.querySelector("main").insertAdjacentHTML("beforeend", backdropTemplate)
+document.querySelector("main")?.insertAdjacentHTML("beforeend", backdropTemplate)
 const meshBackground = document.querySelector(".mesh-background")
 
-function pauseAnimations(shouldPause) {
-	if (shouldPause) meshBackground.classList.add("paused")
-	else meshBackground.classList.remove("paused")
+function pauseAnimations(shouldPause: boolean): void {
+	if (shouldPause) meshBackground?.classList.add("paused")
+	else meshBackground?.classList.remove("paused")
 }
 
-function pauseAnimationsIfNoSetting(shouldPause) {
-	let savePreferences = localStorage.getItem("savePreferences") !== null
+function pauseAnimationsIfNoSetting(shouldPause: boolean): void {
+	const savePreferences = localStorage.getItem("savePreferences") !== null
 
 	if (!savePreferences) pauseAnimations(shouldPause)
 }
 
 // pause animations if the user prefers reduced motion
-const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
+const motionQuery: MediaQueryList = window.matchMedia("(prefers-reduced-motion: reduce)")
 motionQuery.addEventListener("change", (e) => pauseAnimations(e.matches))
 
 // pause animations when the page is not visible
@@ -31,12 +31,16 @@ window.addEventListener("focus", () => {
 })
 
 // pause animations when settings change
-window.addEventListener("background-animation-change", (e) => pauseAnimations(e.detail.isAnimationOn))
+window.addEventListener("background-animation-change", (e) => {
+	const ce = e as CustomEvent
+	pauseAnimations(ce.detail.isAnimationOn)
+})
 
-let savePreferences = localStorage.getItem("savePreferences") !== null
+const savePreferences = localStorage.getItem("savePreferences") !== null
 
 if (savePreferences) {
-	let savedBackgroundAnimationState = localStorage.getItem("savedBackgroundAnimationState")
+	const savedBackgroundAnimationState = localStorage.getItem("savedBackgroundAnimationState")
+
 	if (savedBackgroundAnimationState !== null) {
 		pauseAnimations(!(savedBackgroundAnimationState === "true"))
 	}

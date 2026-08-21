@@ -1,18 +1,21 @@
 import "./styles.css"
 import template from "./template.html?raw"
+import type { SettingConfig } from "@app/components/settings-menu/main"
 
-function savePreferences(value) {
-	let savePreferences = localStorage.getItem("savePreferences") !== null
+function savePreferences(value: string): void {
+	const savePreferences = localStorage.getItem("savePreferences") !== null
 
 	if (savePreferences) {
 		localStorage.setItem("savedLocale", value)
 	}
 }
 
-export const languageToggleConfig = {
+export const languageToggleConfig: SettingConfig = {
 	template: template,
 	init: (container) => {
-		const dropdown = container.querySelector("#localization-dropdown select")
+		const dropdown = container.querySelector<HTMLSelectElement>("#localization-dropdown select")
+
+		if (!dropdown) return
 
 		dropdown.addEventListener("change", () => {
 			savePreferences(dropdown.value)
@@ -26,12 +29,13 @@ export const languageToggleConfig = {
 			)
 		})
 
-		function syncUI(lng) {
-			if (dropdown.value !== lng) dropdown.value = lng
+		function syncUI(lng: string): void {
+			if (dropdown && dropdown.value !== lng) dropdown.value = lng
 		}
 
 		window.addEventListener("locale-updated", (e) => {
-			syncUI(e.detail.locale)
+			const ce = e as CustomEvent
+			syncUI(ce.detail.locale)
 		})
 		window.addEventListener("save-preferences-change", () => savePreferences(dropdown.value))
 	},

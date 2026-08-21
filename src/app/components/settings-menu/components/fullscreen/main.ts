@@ -1,13 +1,16 @@
 import "./styles.css"
 import template from "./template.html?raw"
+import type { SettingConfig } from "@app/components/settings-menu/main"
 
-export const fullscreenToggleConfig = {
+export const fullscreenToggleConfig: SettingConfig = {
 	template: template,
-	init: (container) => {
-		const toggle = container.querySelector("#fullscreen-toggle input")
+	init: (container: HTMLElement): void => {
+		const toggle = container.querySelector<HTMLInputElement>("#fullscreen-toggle input")
+
+		if (!toggle) return
 
 		toggle.addEventListener("change", () => {
-			let isChecked = toggle.checked
+			const isChecked = toggle.checked
 
 			if (isChecked) {
 				document.documentElement
@@ -20,8 +23,8 @@ export const fullscreenToggleConfig = {
 			}
 		})
 
-		function syncUI() {
-			toggle.checked = document.fullscreenElement !== null
+		function syncUI(): void {
+			if (toggle) toggle.checked = document.fullscreenElement !== null
 		}
 
 		window.addEventListener("fullscreenchange", syncUI)

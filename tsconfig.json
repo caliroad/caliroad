@@ -4,16 +4,37 @@
 		"module": "ESNext",
 		"moduleResolution": "bundler",
 		"strict": true,
+		"types": [
+			"vite/client"
+		],
+		"baseUrl": ".",
+		"paths": {
+			"@app/*": [
+				"src/app/*"
+			],
+			"@features/*": [
+				"src/features/*"
+			],
+			"@shared/*": [
+				"src/shared/*"
+			]
+		},
+		"noImplicitAny": true,
 		"noImplicitReturns": true,
+		"exactOptionalPropertyTypes": true,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitOverride": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
-		"noFallthroughCasesInSwitch": true,
-		"exactOptionalPropertyTypes": true,
-		"noImplicitOverride": true,
-		"noImplicitAny": true,
-		"allowJs": false,
-		"noEmit": true,
-		"isolatedModules": true
+		"allowUnreachableCode": false,
+		"allowUnusedLabels": false,
+		"verbatimModuleSyntax": true,
+		"erasableSyntaxOnly": true,
+		"skipLibCheck": true,
+		"isolatedModules": true,
+		"allowJs": true,
+		"checkJs": true,
+		"noEmit": true
 	},
 	"include": [
 		"src/**/*"
