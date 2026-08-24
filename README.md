@@ -5,9 +5,9 @@
 <h1 align="center">Caliroad</h1>
 
 <p align="center">
-	The visual encyclopedia of Calisthenics exercises
+	The open visual encyclopedia of fitness exercises
 </p>
 
 <p align="center">
-    Caliroad is an encyclopedia of bodyweight exercises and skills partaining to Calisthenics. It features a graph view and a filtering system for viewing a map of exercises and the relations between them.
+    Caliroad is an open, interdisciplinary fitness encyclopedia that helps users explore the relationships between exercises in fields like calisthenics, weightlifting, yoga, and running. It features an interactive visual graph built into a fully responsive web app.
 </p>
