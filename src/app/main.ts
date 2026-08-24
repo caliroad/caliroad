@@ -1,11 +1,11 @@
-import "./utils/auto-theme-toggle.ts"
+import "./utils/auto-theme-toggle"
 
 import "./styles/main.css"
 
-import "@features/force-graph/main.js"
-import "./components/backdrop/main.ts"
-import "./components/localization/main.js"
-import "./components/info-popup/main.js"
-import "./components/settings-menu/main.js"
+import "@features/force-graph/main"
+import "./components/backdrop/main"
+import "./components/localization/main"
+import "./components/info-popup/main"
+import "./components/settings-menu/main"
 
-import "@features/exercises/main.js"
+import "@features/exercises/main"

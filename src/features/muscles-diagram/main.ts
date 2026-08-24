@@ -101,7 +101,7 @@ export function renderMusclesDiagram(replaceAt: string): void {
 
 	const musclesDiagramFront = document.querySelector<SVGGraphicsElement>("#muscles-diagram-front")
 	const musclesDiagramBack = document.querySelector<SVGGraphicsElement>("#muscles-diagram-back")
-	const tooltip = document.getElementById("#svg-tooltip")
+	const tooltip = document.getElementById("svg-tooltip")
 
 	if (!musclesDiagramFront || !musclesDiagramBack || !tooltip) return
 

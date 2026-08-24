@@ -11,7 +11,7 @@ if (settingsIconContainer) settingsIconContainer.innerHTML = settingsSVG
 
 document.body.insertAdjacentHTML("beforeend", settingsTemplate)
 
-const button = document.querySelector<HTMLButtonElement>("settings-button")
+const button = document.querySelector<HTMLButtonElement>("#settings-button")
 const settingsMenu = document.getElementById("settings-menu")
 const optionsContainer = document.getElementById("options-container")
 
