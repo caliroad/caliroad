@@ -29,3 +29,7 @@ $ npm run dev
 $ npm run build
 $ npm run preview # Run it on your machine
 ```
+
+## Contributing
+
+Check out the [Contributing Guidelines](./CONTRIBUTING.md).
