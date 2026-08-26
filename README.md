@@ -11,3 +11,21 @@
 <p align="center">
     Caliroad is an open, interdisciplinary fitness encyclopedia that helps users explore the relationships between exercises in fields like calisthenics, weightlifting, yoga, and running. It features an interactive visual graph built into a fully responsive web app.
 </p>
+
+## Development
+
+```bash
+# Installing dependencies
+$ npm install
+
+# Running the development version
+$ npm run dev
+```
+
+## Deployment
+
+```bash
+# Building the production version
+$ npm run build
+$ npm run preview # Run it on your machine
+```
