@@ -1,0 +1,19 @@
+# build outputs
+dist/
+build/
+
+# dependencies
+node_modules/
+
+# environment files and local secrets
+.env
+.env.*
+!.env.example
+
+# cache and logs
+.vite-inspect/
+.cache/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+*.log
