@@ -8,6 +8,8 @@ export default defineConfig({
 
 	base: process.env.GITHUB_ACTIONS ? "/caliroad/" : "/",
 
+	publicDir: "../public",
+
 	server: {
 		open: true,
 	},
