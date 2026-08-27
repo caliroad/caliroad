@@ -6,6 +6,8 @@ import path from "path"
 export default defineConfig({
 	root: "./src",
 
+	base: process.env.GITHUB_ACTIONS ? "/caliroad/" : "/",
+
 	server: {
 		open: true,
 	},

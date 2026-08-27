@@ -14,7 +14,38 @@ The project is layed out following a simplified version of Feature-Sliced Design
 
 ### Software Philosophy
 
-1. **Contract-first Design**: Contract-first design, as Go's typesystem, is used throughout the project. Type inference is used, meaning that not every variable needs to have a type, unless it is used in way that the compiler allows it, but its use in the code is very specific to its actual type and not to a more general one.
+#### Contract-first Design
+
+As Go's typesystem, is used throughout the project. Type inference is used, meaning that not every variable needs to have a type, unless it is used in way that the compiler allows it, but its use in the code is very specific to its actual type and not to a more general one.
+
+#### Git Workflow Standard
+
+Trunk Based Development and GitFlow are the version control management practices used, also partially inspired by the development style of the Linux Kernel. The principal parts are as follow:
+
+- **tags**: must always be working, deployable and on a releasable state (i.e. production ready)
+- **`main`**: main is sacred, it can only be merged into or tagged. It must always be in a working and deployable state (i.e. staging ready). Its ideal history is topological at the integration points with `dev`.
+- **`dev`**: must always be in a working state (i.e. development ready). Its ideal history is linear.
+
+##### Development workflow:
+
+1. **Starting a new feature**: feature branches are created stemming from the `dev` branch, named in the format of `<type>/<name>`, where `<type>` is one of those specified on the guidelines of [Conventional Commits v1.0.0](https://www.conventionalcommits.org/en/v1.0.0/).
+
+- _if needed, for backup or collaboration purposes_: push the branch to remote.
+
+2. **Upkeep (keeping the feature branch current)**: to prevent the branch from falling out of sync from `dev` or before joining it to `dev`:
+
+- _if the branch is only local_: fetch and `rebase dev`.
+
+- _if the branch is on remote and has a sole owner_: fetch, `rebase dev` into the branch, and push with `--force-with-lease` to ensure there are no other developers. If the push fails (meaning someone else pushed commits to this branch), fetch again, `rebase origin/<feature-branch>` to integrate their unexpected commits, and push again with `--force-with-lease`.
+
+    For teammates who have previously pulled this branch: if they have **no** unpublished local commits, they must fetch and `reset --hard origin/<feature-branch>`. If they have **unpublished local commits**, they must fetch and `rebase origin/<feature-branch>`.
+
+- _if the branch is on remote and is collaborated on_: do **not** rebase. Fetch and merge `dev` into the branch, then `push` as usual.
+
+3. **Integrating the feature**: `merge --squash` the feature branch into `dev` and add a relevant commit message.
+4. **Cleanup**: push `dev` to remote, delete the local (and remote) branch.
+5. **Promoting Development to Staging**: once related features are completed, `merge --no-ff dev` into `main` with a relevant commit message.
+6. **Promoting Staging to Production**: the latest commit is tagged and the tags are pushed to remote.
 
 ## Development
 
