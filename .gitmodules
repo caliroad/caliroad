@@ -1,0 +1,4 @@
+[submodule "src/shared/data/calisthenics"]
+	path = src/shared/data/calisthenics
+	url = https://github.com/caliroad/calisthenics-lib.git
+	branch = main
