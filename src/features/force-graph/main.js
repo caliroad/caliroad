@@ -68,8 +68,7 @@ const hydratedNodes = rawGraphData.nodes.map((node) => {
 	const img = new Image()
 	img.src = node.img
 
-	// reconstruct the key used in your data-fetches.js glob
-	const imageKey = `../data/${node.id}/avatar.png`
+	const imageKey = node.category ? `../data/${node.category}/${node.id}/avatar.png` : `../data/${node.id}/avatar.png`
 
 	// check if Vite generated a hashed URL. Fallback to node.img for safety/dev.
 	img.src = exerciseImages[imageKey] || node.img
@@ -188,7 +187,9 @@ function goToPage(node) {
 		window.open(node.url, "_blank")
 	} else {
 		const exercise = node.id.toString()
-		window.location.href = `#${exercise}`
+		const categoryPath = node.category ? `${node.category}/` : ""
+
+		window.location.href = `#/${categoryPath}${exercise}`
 	}
 }
 

@@ -37,11 +37,10 @@ function closeExerciseWindow() {
 	}
 }
 
-async function loadExercise(name) {
+async function loadExercise(name, category) {
 	if (!name) return closeExerciseWindow()
 
-	// grab everything perfectly formatted from the parser utility
-	const exerciseData = getExerciseData(name)
+	const exerciseData = getExerciseData(name, category)
 	if (!exerciseData) {
 		history.back()
 		return
@@ -65,7 +64,7 @@ async function loadExercise(name) {
 	contentFreeformEl.innerHTML = await exerciseData.htmlContent
 
 	renderBanner(exerciseData.title, exerciseData.assets)
-	renderVariations(exerciseData.attributes)
+	renderVariations(exerciseData.attributes, exerciseData.category)
 	renderMuscles(exerciseData.attributes)
 	renderCarousel(exerciseData.attributes.videos)
 
@@ -75,8 +74,21 @@ async function loadExercise(name) {
 }
 
 async function handleRoute() {
-	const hash = window.location.hash.slice(1)
-	await loadExercise(hash)
+	// strip leading '#' or '#/'
+	const route = window.location.hash.replace(/^#\/?/, "")
+
+	if (!route) {
+		await loadExercise(null, null)
+		return
+	}
+
+	const parts = route.split("/")
+
+	// support nested routes (/#/calisthenics/planche) and fallback routes (/#/planche)
+	const category = parts.length > 1 ? parts[0] : null
+	const name = parts.length > 1 ? parts[1] : parts[0]
+
+	await loadExercise(name, category)
 }
 
 window.addEventListener("hashchange", handleRoute)

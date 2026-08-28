@@ -12,6 +12,7 @@ export interface ExerciseAssets {
 
 export interface ParsedExercise {
 	name: string
+	category: string
 	title: string
 	attributes: ExerciseAttributes
 	htmlContent: string
