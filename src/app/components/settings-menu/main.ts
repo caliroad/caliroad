@@ -7,7 +7,7 @@ import { preferencesToggleConfig } from "./components/preferences/main.js"
 import { fullscreenToggleConfig } from "./components/fullscreen/main.js"
 
 const settingsIconContainer = document.getElementById("settings-icon")
-if (settingsIconContainer) settingsIconContainer.innerHTML = settingsSVG
+if (settingsIconContainer) settingsIconContainer.outerHTML = settingsSVG
 
 document.body.insertAdjacentHTML("beforeend", settingsTemplate)
 
