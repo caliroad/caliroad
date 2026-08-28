@@ -19,28 +19,41 @@ export default function buildGraphDataPlugin() {
 		load(id) {
 			if (id !== resolvedVirtualModuleId) return
 
-			// resolve path to 'shared/data' relative to this build file
 			const dataDir = path.resolve(__dirname, "../../../shared/data")
 
 			if (!fs.existsSync(dataDir)) {
 				return `export default { nodes: [], links: [] }`
 			}
 
-			const exerciseFolders = fs
+			// 1. Read category directories (e.g., calisthenics)
+			const categories = fs
 				.readdirSync(dataDir)
-				.filter((f) => fs.statSync(path.join(dataDir, f)).isDirectory())
+				.filter((item) => fs.statSync(path.join(dataDir, item)).isDirectory())
 
 			const buildTimeAssetDictionary = {}
+			const exerciseEntries = [] // Array of { category, exercise }
 
-			for (const exercise of exerciseFolders) {
-				const avatarPath = path.join(dataDir, exercise, "avatar.png")
-				if (fs.existsSync(avatarPath)) {
-					buildTimeAssetDictionary[`../data/${exercise}/avatar.png`] = `/shared/data/${exercise}/avatar.png`
-				}
+			// 2. Discover exercise directories within each category
+			for (const category of categories) {
+				const categoryPath = path.join(dataDir, category)
+				const exercises = fs
+					.readdirSync(categoryPath)
+					.filter((item) => fs.statSync(path.join(categoryPath, item)).isDirectory())
 
-				const bannerPath = path.join(dataDir, exercise, "banner.jpg")
-				if (fs.existsSync(bannerPath)) {
-					buildTimeAssetDictionary[`../data/${exercise}/banner.jpg`] = `/shared/data/${exercise}/banner.jpg`
+				for (const exercise of exercises) {
+					exerciseEntries.push({ category, exercise })
+
+					const avatarPath = path.join(categoryPath, exercise, "avatar.png")
+					if (fs.existsSync(avatarPath)) {
+						buildTimeAssetDictionary[`../data/${category}/${exercise}/avatar.png`] =
+							`/shared/data/${category}/${exercise}/avatar.png`
+					}
+
+					const bannerPath = path.join(categoryPath, exercise, "banner.jpg")
+					if (fs.existsSync(bannerPath)) {
+						buildTimeAssetDictionary[`../data/${category}/${exercise}/banner.jpg`] =
+							`/shared/data/${category}/${exercise}/banner.jpg`
+					}
 				}
 			}
 
@@ -52,16 +65,18 @@ export default function buildGraphDataPlugin() {
 			}
 			const seenLinks = new Set()
 
-			for (const exercise of exerciseFolders) {
-				const mdPath = path.join(dataDir, exercise, "exercise.md")
+			// 3. Parse Markdown files using the category path
+			for (const { category, exercise } of exerciseEntries) {
+				const mdPath = path.join(dataDir, category, exercise, "exercise.md")
 				if (!fs.existsSync(mdPath)) continue
 
 				const rawText = fs.readFileSync(mdPath, "utf-8")
-				const exerciseData = parseExercise(exercise, rawText)
+				const exerciseData = parseExercise(exercise, rawText, category)
 				if (!exerciseData) continue
 
 				graphData.nodes.push({
 					id: exerciseData.name,
+					category: category,
 					img: exerciseData.assets.avatarUrl,
 				})
 
@@ -74,7 +89,6 @@ export default function buildGraphDataPlugin() {
 					const linkFingerprint = [exerciseData.name, variation].sort().join("::")
 
 					if (seenLinks.has(linkFingerprint)) continue
-
 					seenLinks.add(linkFingerprint)
 
 					graphData.links.push({
