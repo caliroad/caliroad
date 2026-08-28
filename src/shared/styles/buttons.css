@@ -1,5 +1,6 @@
 .icon-button {
 	width: 24px;
+	display: flex;
 
 	background-color: transparent;
 	color: var(--fg-subtext);
