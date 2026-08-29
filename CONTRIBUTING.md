@@ -47,7 +47,54 @@ Trunk Based Development and GitFlow are the version control management practices
 5. **Promoting Development to Staging**: once related features are completed, `merge --no-ff dev` into `main` with a relevant commit message.
 6. **Promoting Staging to Production**: the latest commit is tagged and the tags are pushed to remote.
 
-## Development
+## Deployment
+
+Deployment is done automatically through GitHub Actions. Currently, all new commits on `main` trigger the deployment workflow to the GitHub Pages link: [caliroad.github.io/caliroad](caliroad.github.io/caliroad), which is the live site. Because there are new updates being done to the web app, the final build will be based on the latest commit: whether it is a tagged version or not. Eventually, separate workflows will manage code changes on main: a production workflow based on the latest tagged commit, and a staging workflow based on the latest commit.
+
+### Libraries
+
+This repository contains the source code of the web app, however, the actual libraries for each fitness discipline live on separate Git repositories within the org.
+
+#### Adding a New Library
+
+1. Create the repo within the org.
+2. Add the submodule to this repo.
+
+```bash
+# From `dev` or a sub-branch
+$ git submodule add -b main https://github.com/caliroad/fitness-lib.git src/shared/data/fitness-lib
+$ git commit -m "chore: add fitness-lib as submodule"
+$ git submodule update --init --recursive # -- src/shared/data/fitness-lib
+```
+
+3. Merge the changes into `main`.
+
+```bash
+# Use -f (force) if git failes to switch branches due to "untracked working tree files"
+$ git switch -f main
+$ git merge dev
+```
+
+#### Updating Existing Libraries
+
+From within `dev`:
+
+1. Update the submodules.
+
+```bash
+$ git submodule update --remote --merge
+$ git commit -am "chore: bump library submodules"
+```
+
+2. Merge the changes.
+
+```bash
+$ git switch main
+$ git merge dev
+
+> [!IMPORTANT]
+> To avoid problems with permissions within the deployment workflow's environment, Git Submodules will have their remotes set using HTTP.
+```
 
 ### Tooling
 
