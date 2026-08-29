@@ -18,7 +18,7 @@ The project is layed out following a simplified version of Feature-Sliced Design
 
 As Go's typesystem, is used throughout the project. Type inference is used, meaning that not every variable needs to have a type, unless it is used in way that the compiler allows it, but its use in the code is very specific to its actual type and not to a more general one.
 
-#### Git Workflow Standard
+## Development
 
 Trunk Based Development and GitFlow are the version control management practices used, also partially inspired by the development style of the Linux Kernel. The principal parts are as follow:
 
