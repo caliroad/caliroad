@@ -18,6 +18,28 @@ The project is layed out following a simplified version of Feature-Sliced Design
 
 As Go's typesystem, is used throughout the project. Type inference is used, meaning that not every variable needs to have a type, unless it is used in way that the compiler allows it, but its use in the code is very specific to its actual type and not to a more general one.
 
+## Tech Stack
+
+This web app uses a Vanilla stack:
+
+- **Frontend**: `TSX`, `HTML`, and `CSS`.
+- **Build**: [Vite](https://vite.dev/).
+- **DevOps**: [GitHub Actions](https://docs.github.com/en/actions), and [GitHub Pages](https://docs.github.com/en/pages).
+
+### Tooling
+
+- **Linter**: [ESlint](https://eslint.org/) is used, mostly for enforcing better coding practices.
+- **Formatter**: [Prettier](https://prettier.io/) is the only formatter used.
+- **Language Server Protocol (LSP)**: [VTSLS](https://vtsls.com/) is used for TS, [css-language-server](https://github.com/hrsh7th/vscode-langservers-extracted) for CSS, [html-language-server](https://github.com/hrsh7th/vscode-langservers-extracted) for HTML, [json-language-server](https://github.com/hrsh7th/vscode-langservers-extracted) for JSON, and [Marksman](https://github.com/artempyanykh/marksman) for Markdown.
+
+### Localization
+
+`i18next` is used for localization, however, the implementation varies a little from a main JSON with all the locales: every component that needs them has a `locales.json` file coallocated with the relevant markup. They feature standard locale names with nestable key-value pairs. At build-time, the locales are merged into a single JS Object, with the path to each `locales.json` prefixing each of the keys to avoid polluting the global scope.
+
+This design decision was taken to keep everything related to a component within itself.
+
+Currently, only English and Spanish are supported. The naming of muscle groups is not translated as they follow standard Greek-named medical terms.
+
 ## Development
 
 Trunk Based Development and GitFlow are the version control management practices used, also partially inspired by the development style of the Linux Kernel. The principal parts are as follow:
@@ -99,25 +121,3 @@ $ git merge dev
 > [!IMPORTANT]
 > To avoid problems with permissions within the deployment workflow's environment, Git Submodules will have their remotes set using HTTP.
 ```
-
-### Tooling
-
-- **Linter**: [ESlint](https://eslint.org/) is used, mostly for enforcing better coding practices.
-- **Formatter**: [Prettier](https://prettier.io/) is the only formatter used.
-- **Language Server Protocol (LSP)**: [VTSLS](https://vtsls.com/) is used for TS, [css-language-server](https://github.com/hrsh7th/vscode-langservers-extracted) for CSS, [html-language-server](https://github.com/hrsh7th/vscode-langservers-extracted) for HTML, [json-language-server](https://github.com/hrsh7th/vscode-langservers-extracted) for JSON, and [Marksman](https://github.com/artempyanykh/marksman) for Markdown.
-
-### Tech Stack
-
-This web app uses a Vanilla stack:
-
-- **Frontend**: `TSX`, `HTML`, and `CSS`.
-- **Build**: [Vite](https://vite.dev/).
-- **DevOps**: [GitHub Actions](https://docs.github.com/en/actions), and [GitHub Pages](https://docs.github.com/en/pages).
-
-### Localization
-
-`i18next` is used for localization, however, the implementation varies a little from a main JSON with all the locales: every component that needs them has a `locales.json` file coallocated with the relevant markup. They feature standard locale names with nestable key-value pairs. At build-time, the locales are merged into a single JS Object, with the path to each `locales.json` prefixing each of the keys to avoid polluting the global scope.
-
-This design decision was taken to keep everything related to a component within itself.
-
-Currently, only English and Spanish are supported. The naming of muscle groups is not translated as they follow standard Greek-named medical terms.
