@@ -18,7 +18,29 @@ The project is layed out following a simplified version of Feature-Sliced Design
 
 As Go's typesystem, is used throughout the project. Type inference is used, meaning that not every variable needs to have a type, unless it is used in way that the compiler allows it, but its use in the code is very specific to its actual type and not to a more general one.
 
-#### Git Workflow Standard
+## Tech Stack
+
+This web app uses a Vanilla stack:
+
+- **Frontend**: `TSX`, `HTML`, and `CSS`.
+- **Build**: [Vite](https://vite.dev/).
+- **DevOps**: [GitHub Actions](https://docs.github.com/en/actions), and [GitHub Pages](https://docs.github.com/en/pages).
+
+### Tooling
+
+- **Linter**: [ESlint](https://eslint.org/) is used, mostly for enforcing better coding practices.
+- **Formatter**: [Prettier](https://prettier.io/) is the only formatter used.
+- **Language Server Protocol (LSP)**: [VTSLS](https://vtsls.com/) is used for TS, [css-language-server](https://github.com/hrsh7th/vscode-langservers-extracted) for CSS, [html-language-server](https://github.com/hrsh7th/vscode-langservers-extracted) for HTML, [json-language-server](https://github.com/hrsh7th/vscode-langservers-extracted) for JSON, and [Marksman](https://github.com/artempyanykh/marksman) for Markdown.
+
+### Localization
+
+`i18next` is used for localization, however, the implementation varies a little from a main JSON with all the locales: every component that needs them has a `locales.json` file coallocated with the relevant markup. They feature standard locale names with nestable key-value pairs. At build-time, the locales are merged into a single JS Object, with the path to each `locales.json` prefixing each of the keys to avoid polluting the global scope.
+
+This design decision was taken to keep everything related to a component within itself.
+
+Currently, only English and Spanish are supported. The naming of muscle groups is not translated as they follow standard Greek-named medical terms.
+
+## Development
 
 Trunk Based Development and GitFlow are the version control management practices used, also partially inspired by the development style of the Linux Kernel. The principal parts are as follow:
 
@@ -26,7 +48,7 @@ Trunk Based Development and GitFlow are the version control management practices
 - **`main`**: main is sacred, it can only be merged into or tagged. It must always be in a working and deployable state (i.e. staging ready). Its ideal history is topological at the integration points with `dev`.
 - **`dev`**: must always be in a working state (i.e. development ready). Its ideal history is linear.
 
-##### Development workflow:
+### Workflow
 
 1. **Starting a new feature**: feature branches are created stemming from the `dev` branch, named in the format of `<type>/<name>`, where `<type>` is one of those specified on the guidelines of [Conventional Commits v1.0.0](https://www.conventionalcommits.org/en/v1.0.0/).
 
@@ -47,29 +69,56 @@ Trunk Based Development and GitFlow are the version control management practices
 5. **Promoting Development to Staging**: once related features are completed, `merge --no-ff dev` into `main` with a relevant commit message.
 6. **Promoting Staging to Production**: the latest commit is tagged and the tags are pushed to remote.
 
-## Development
-
-### Tooling
-
-- **Linter**: [ESlint](https://eslint.org/) is used, mostly for enforcing better coding practices.
-- **Formatter**: [Prettier](https://prettier.io/) is the only formatter used.
-- **Language Server Protocol (LSP)**: [VTSLS](https://vtsls.com/) is used for TS, [css-language-server](https://github.com/hrsh7th/vscode-langservers-extracted) for CSS, [html-language-server](https://github.com/hrsh7th/vscode-langservers-extracted) for HTML, [json-language-server](https://github.com/hrsh7th/vscode-langservers-extracted) for JSON, and [Marksman](https://github.com/artempyanykh/marksman) for Markdown.
-
-### Tech Stack
-
-This web app uses a Vanilla stack:
-
-- **Frontend**: `TSX`, `HTML`, and `CSS`.
-- **Build**: [Vite](https://vite.dev/).
-
-### Localization
-
-`i18next` is used for localization, however, the implementation varies a little from a main JSON with all the locales: every component that needs them has a `locales.json` file coallocated with the relevant markup. They feature standard locale names with nestable key-value pairs. At build-time, the locales are merged into a single JS Object, with the path to each `locales.json` prefixing each of the keys to avoid polluting the global scope.
-
-This design decision was taken to keep everything related to a component within itself.
-
-Currently, only English and Spanish are supported. The naming of muscle groups is not translated as they follow standard Greek-named medical terms.
-
 ### Commit Format
 
 Commit messages follow standard [Conventional Commits v1.0.0](https://www.conventionalcommits.org/en/v1.0.0/) guidelines.
+
+## Deployment
+
+Deployment is done automatically through GitHub Actions. Currently, all new commits on `main` trigger the deployment workflow to the GitHub Pages link: [caliroad.github.io/caliroad](caliroad.github.io/caliroad), which is the live site. Because there are new updates being done to the web app, the final build will be based on the latest commit: whether it is a tagged version or not. Eventually, separate workflows will manage code changes on main: a production workflow based on the latest tagged commit, and a staging workflow based on the latest commit.
+
+### Libraries
+
+This repository contains the source code of the web app, however, the actual libraries for each fitness discipline live on separate Git repositories within the org.
+
+#### Adding a New Library
+
+1. Create the repo within the org.
+2. Add the submodule to this repo.
+
+```bash
+# From `dev` or a sub-branch
+$ git submodule add -b main https://github.com/caliroad/fitness-lib.git src/shared/data/fitness-lib
+$ git commit -m "chore: add fitness-lib as submodule"
+$ git submodule update --init --recursive # -- src/shared/data/fitness-lib
+```
+
+3. Merge the changes into `main`.
+
+```bash
+# Use -f (force) if git failes to switch branches due to "untracked working tree files"
+$ git switch -f main
+$ git merge dev
+```
+
+#### Updating Existing Libraries
+
+From within `dev`:
+
+1. Update the submodules.
+
+```bash
+$ git submodule update --remote --merge
+$ git commit -am "chore: bump library submodules"
+```
+
+2. Merge the changes.
+
+```bash
+$ git switch main
+$ git merge dev
+```
+
+> [!IMPORTANT]
+> **Submodule Remote Links**\
+> To avoid problems with permissions within the deployment workflow's environment, Git Submodules will have their remotes set using HTTP.

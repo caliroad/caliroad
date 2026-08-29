@@ -15,6 +15,9 @@
 ## Development
 
 ```bash
+# Cloning the repo (use HTTP if you don't have SSH set up)
+$ git clone --recurse-submodules git@github.com:caliroad/caliroad.git
+
 # Installing dependencies
 $ npm install
 
@@ -22,7 +25,7 @@ $ npm install
 $ npm run dev
 ```
 
-## Deployment
+## Building
 
 ```bash
 # Building the production version
