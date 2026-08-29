@@ -108,6 +108,7 @@ This web app uses a Vanilla stack:
 
 - **Frontend**: `TSX`, `HTML`, and `CSS`.
 - **Build**: [Vite](https://vite.dev/).
+- **DevOps**: GitHub Actions, and GitHub Pages
 
 ### Localization
 
