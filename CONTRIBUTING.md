@@ -120,5 +120,5 @@ $ git merge dev
 ```
 
 > [!IMPORTANT]
-> **Submodule Remote Links**
+> **Submodule Remote Links**\
 > To avoid problems with permissions within the deployment workflow's environment, Git Submodules will have their remotes set using HTTP.
