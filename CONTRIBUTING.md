@@ -26,7 +26,7 @@ Trunk Based Development and GitFlow are the version control management practices
 - **`main`**: main is sacred, it can only be merged into or tagged. It must always be in a working and deployable state (i.e. staging ready). Its ideal history is topological at the integration points with `dev`.
 - **`dev`**: must always be in a working state (i.e. development ready). Its ideal history is linear.
 
-##### Development workflow:
+### Workflow
 
 1. **Starting a new feature**: feature branches are created stemming from the `dev` branch, named in the format of `<type>/<name>`, where `<type>` is one of those specified on the guidelines of [Conventional Commits v1.0.0](https://www.conventionalcommits.org/en/v1.0.0/).
 
@@ -46,6 +46,10 @@ Trunk Based Development and GitFlow are the version control management practices
 4. **Cleanup**: push `dev` to remote, delete the local (and remote) branch.
 5. **Promoting Development to Staging**: once related features are completed, `merge --no-ff dev` into `main` with a relevant commit message.
 6. **Promoting Staging to Production**: the latest commit is tagged and the tags are pushed to remote.
+
+### Commit Format
+
+Commit messages follow standard [Conventional Commits v1.0.0](https://www.conventionalcommits.org/en/v1.0.0/) guidelines.
 
 ## Deployment
 
@@ -117,7 +121,3 @@ This web app uses a Vanilla stack:
 This design decision was taken to keep everything related to a component within itself.
 
 Currently, only English and Spanish are supported. The naming of muscle groups is not translated as they follow standard Greek-named medical terms.
-
-### Commit Format
-
-Commit messages follow standard [Conventional Commits v1.0.0](https://www.conventionalcommits.org/en/v1.0.0/) guidelines.
