@@ -117,7 +117,7 @@ $ git commit -am "chore: bump library submodules"
 ```bash
 $ git switch main
 $ git merge dev
-
-> [!IMPORTANT]
-> To avoid problems with permissions within the deployment workflow's environment, Git Submodules will have their remotes set using HTTP.
 ```
+
+> [!IMPORTANT] Submodule Remote Links
+> To avoid problems with permissions within the deployment workflow's environment, Git Submodules will have their remotes set using HTTP.
