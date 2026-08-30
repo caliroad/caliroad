@@ -1,22 +1,50 @@
+// @ts-ignore
 import fs from "fs"
+// @ts-ignore
 import path from "path"
+// @ts-ignore
 import { fileURLToPath } from "url"
 import { createExerciseParser } from "../../../../src/shared/utils/data-parser.js"
+import type { Plugin } from "vite"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-export default function buildGraphDataPlugin() {
+interface GraphNode {
+	id: string
+	category: string
+	img: string
+}
+
+interface GraphLink {
+	source: string
+	target: string
+}
+
+interface GraphData {
+	nodes: GraphNode[]
+	links: GraphLink[]
+}
+
+interface ExerciseEntry {
+	category: string
+	exercise: string
+}
+
+type AssetDictionary = Record<string, string>
+
+export default function buildGraphDataPlugin(): Plugin {
 	const virtualModuleId = "virtual:graph-data"
 	const resolvedVirtualModuleId = "\0" + virtualModuleId
 
 	return {
 		name: "vite-plugin-graph-data",
 
-		resolveId(id) {
+		resolveId(id: string): string | undefined {
 			if (id === virtualModuleId) return resolvedVirtualModuleId
 		},
-		load(id) {
+
+		load(id: string): string | undefined {
 			if (id !== resolvedVirtualModuleId) return
 
 			const dataDir = path.resolve(__dirname, "../../../shared/data")
@@ -26,19 +54,19 @@ export default function buildGraphDataPlugin() {
 			}
 
 			// 1. Read category directories (e.g., calisthenics)
-			const categories = fs
+			const categories: string[] = fs
 				.readdirSync(dataDir)
-				.filter((item) => fs.statSync(path.join(dataDir, item)).isDirectory())
+				.filter((item: string) => fs.statSync(path.join(dataDir, item)).isDirectory())
 
-			const buildTimeAssetDictionary = {}
-			const exerciseEntries = [] // Array of { category, exercise }
+			const buildTimeAssetDictionary: AssetDictionary = {}
+			const exerciseEntries: ExerciseEntry[] = []
 
 			// 2. Discover exercise directories within each category
 			for (const category of categories) {
 				const categoryPath = path.join(dataDir, category)
-				const exercises = fs
+				const exercises: string[] = fs
 					.readdirSync(categoryPath)
-					.filter((item) => fs.statSync(path.join(categoryPath, item)).isDirectory())
+					.filter((item: string) => fs.statSync(path.join(categoryPath, item)).isDirectory())
 
 				for (const exercise of exercises) {
 					exerciseEntries.push({ category, exercise })
@@ -59,11 +87,12 @@ export default function buildGraphDataPlugin() {
 
 			const parseExercise = createExerciseParser(buildTimeAssetDictionary)
 
-			let graphData = {
+			const graphData: GraphData = {
 				nodes: [],
 				links: [],
 			}
-			const seenLinks = new Set()
+
+			const seenLinks = new Set<string>()
 
 			// 3. Parse Markdown files using the category path
 			for (const { category, exercise } of exerciseEntries) {
@@ -76,18 +105,17 @@ export default function buildGraphDataPlugin() {
 
 				graphData.nodes.push({
 					id: exerciseData.name,
-					category: category,
+					category,
 					img: exerciseData.assets.avatarUrl,
 				})
 
-				const variations = [
-					...(exerciseData.attributes?.progressions || []),
-					...(exerciseData.attributes?.regressions || []),
+				const variations: string[] = [
+					 ...((exerciseData.attributes?.progressions as string[]) ?? []),
+					 ...((exerciseData.attributes?.regressions as string[]) ?? []),
 				]
 
 				for (const variation of variations) {
 					const linkFingerprint = [exerciseData.name, variation].sort().join("::")
-
 					if (seenLinks.has(linkFingerprint)) continue
 					seenLinks.add(linkFingerprint)
 

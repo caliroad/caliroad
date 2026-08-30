@@ -2,17 +2,29 @@ import "./styles.css"
 import carouselTemplate from "./template.html?raw"
 import { queryReplace } from "@shared/utils/query-replace"
 
-/** @type {HTMLElement | null} */
-let carousel = null
-/** @type {HTMLElement | null} */
-let btnPrev = null
-/** @type {HTMLElement | null} */
-let btnNext = null
-/** @type {IntersectionObserver | null} */
-let observer = null
+export interface VideoMeta {
+	videoTitle: string
+	author: string
+	authorUrl: string
+}
 
-function getVideoThumbnailURL(videoURL) {
-	const searchPatterns = [/youtu\.be\/([^?&]+)/, /youtube\.com\/watch\?v=([^?&]+)/, /youtube\.com\/embed\/([^?&]+)/]
+interface YouTubeOEmbedResponse {
+	title: string
+	author_name: string
+	author_url: string
+}
+
+let carousel: HTMLElement | null = null
+let btnPrev: HTMLElement | null = null
+let btnNext: HTMLElement | null = null
+let observer: IntersectionObserver | null = null
+
+function getVideoThumbnailURL(videoURL: string): string | null {
+	const searchPatterns: RegExp[] = [
+		/youtu\.be\/([^?&]+)/,
+		/youtube\.com\/watch\?v=([^?&]+)/,
+		/youtube\.com\/embed\/([^?&]+)/,
+	]
 
 	for (const pattern of searchPatterns) {
 		const videoID = videoURL.match(pattern)?.[1]
@@ -21,13 +33,13 @@ function getVideoThumbnailURL(videoURL) {
 	return null
 }
 
-async function getVideoMeta(videoURL) {
+async function getVideoMeta(videoURL: string): Promise<VideoMeta> {
 	try {
 		const endpoint = `https://www.youtube.com/oembed?url=${encodeURIComponent(videoURL)}&format=json`
 		const res = await fetch(endpoint)
 		if (!res.ok) throw new Error("Failed to fetch metadata")
 
-		const data = await res.json()
+		const data: YouTubeOEmbedResponse = await res.json()
 		return {
 			videoTitle: data.title,
 			author: data.author_name,
@@ -39,9 +51,9 @@ async function getVideoMeta(videoURL) {
 	}
 }
 
-function scrollCarousel(direction) {
+function scrollCarousel(direction: number): void {
 	if (!carousel) return
-	const cards = Array.from(carousel.querySelectorAll(".card"))
+	const cards = Array.from(carousel.querySelectorAll<HTMLElement>(".card"))
 	const carouselRect = carousel.getBoundingClientRect()
 
 	const currentIdx = cards.findIndex((card) => {
@@ -61,34 +73,33 @@ function scrollCarousel(direction) {
 	}
 }
 
-// Private setup wrapper to ensure HTML elements are present before touch points are wired
-function initCarouselElements() {
+function initCarouselElements(): boolean {
 	queryReplace("#carousel-placeholder", carouselTemplate)
-	// const placeholder = document.querySelector("#carousel-placeholder")
-	// if (placeholder) placeholder.outerHTML = carouselTemplate
 
-	carousel = document.querySelector(".slide-panel .carousel")
-	btnPrev = document.querySelector(".slide-panel .nav-btn.prev")
-	btnNext = document.querySelector(".slide-panel .nav-btn.next")
+	carousel = document.querySelector<HTMLElement>(".slide-panel .carousel")
+	btnPrev = document.querySelector<HTMLElement>(".slide-panel .nav-btn.prev")
+	btnNext = document.querySelector<HTMLElement>(".slide-panel .nav-btn.next")
 
 	if (!carousel || !btnPrev || !btnNext) {
 		console.warn("Carousel wrapper markup elements not found in DOM yet.")
 		return false
 	}
 
-	// Attach navigation listeners cleanly
+	// attach navigation listeners cleanly
 	btnPrev.addEventListener("click", () => scrollCarousel(-1))
 	btnNext.addEventListener("click", () => scrollCarousel(1))
 
-	// Initialize observer bound to the confirmed local carousel container element
+	// initialize observer bound to the confirmed local carousel container element
 	observer = new IntersectionObserver(
-		(entries) => {
+		(entries: IntersectionObserverEntry[]) => {
 			entries.forEach((entry) => {
 				if (entry.isIntersecting) {
 					document.querySelectorAll(".scroll-markers a").forEach((dot) => dot.classList.remove("active"))
 
 					const activeId = entry.target.id
-					const activeScrollMarker = document.querySelector(`.scroll-markers a[href="#${activeId}"]`)
+					const activeScrollMarker = document.querySelector<HTMLAnchorElement>(
+						`.scroll-markers a[href="#${activeId}"]`
+					)
 
 					if (activeScrollMarker) {
 						activeScrollMarker.classList.add("active")
@@ -105,18 +116,17 @@ function initCarouselElements() {
 	return true
 }
 
-export function renderCarousel(videos) {
+export function renderCarousel(videos: string[] | undefined | null): void {
 	if (!videos || !videos.length) return
 
-	initCarouselElements()
+	if (!initCarouselElements() || !carousel) return
 
 	carousel.innerHTML = ""
-	const markersContainer = document.querySelector(".scroll-markers")
+	const markersContainer = document.querySelector<HTMLElement>(".scroll-markers")
 	if (!markersContainer) return
 	markersContainer.innerHTML = ""
 
-	// Notice we removed the "async" keyword from the forEach callback
-	videos.forEach((videoURL, idx) => {
+	videos.forEach((videoURL: string, idx: number) => {
 		// Stage 1: immediate skeleton injection
 		const card = document.createElement("div")
 		const img = document.createElement("img")
@@ -134,21 +144,21 @@ export function renderCarousel(videos) {
 
 		card.appendChild(img)
 		card.appendChild(title)
-		carousel.appendChild(card)
+		carousel!.appendChild(card)
 		markersContainer.appendChild(marker)
 
 		if (observer) observer.observe(card)
 
-		// stage 2: asynchronous hydration ---
+		// asynchronous hydration
 		const thumbURL = getVideoThumbnailURL(videoURL)
 		if (thumbURL) img.src = thumbURL
 
 		// fetch the YouTube metadata
-		getVideoMeta(videoURL).then(({ videoTitle, author }) => {
+		getVideoMeta(videoURL).then(({ videoTitle, author }: VideoMeta) => {
 			title.textContent = `${videoTitle} — @${author}`
 
 			// function to trigger the CSS reveal animation
-			const revealCard = () => {
+			const revealCard = (): void => {
 				card.classList.remove("skeleton")
 				card.classList.add("loaded")
 				// only allow clicking after it's fully loaded
