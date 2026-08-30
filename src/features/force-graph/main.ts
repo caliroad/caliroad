@@ -3,20 +3,81 @@ import forceGraphTemplate from "./template.html?raw"
 import ForceGraph from "force-graph"
 import { exerciseImages } from "@shared/utils/data-fetcher.js"
 
-document.querySelector("main").insertAdjacentHTML("beforeend", forceGraphTemplate)
-const graphContainer = document.getElementById("force-graph")
+document.querySelector("main")!.insertAdjacentHTML("beforeend", forceGraphTemplate)
+const graphContainer = document.getElementById("force-graph") as HTMLElement
 
 import rawGraphData from "virtual:graph-data"
 
-let Graph
+interface RawNode {
+	id: string | number
+	category?: string
+	url?: string
+}
+
+interface RawNodeFromData extends RawNode {
+	img: string
+}
+
+interface HydratedNode extends RawNode {
+	img: HTMLImageElement
+}
+
+interface SpecialNode {
+	id: string
+	url: string
+	html: string
+	width: number
+	height: number
+	_cachedAsset?: CachedAsset
+	category?: string
+	// injected by force-graph at runtime
+	x?: number
+	y?: number
+	fx?: number
+	fy?: number
+}
+
+interface CachedAsset {
+	id: string
+	url: string
+	html: string
+	width: number
+	height: number
+	img: HTMLImageElement
+}
+
+type GraphNode = (HydratedNode | SpecialNode) & {
+	x?: number
+	y?: number
+	fx?: number
+	fy?: number
+}
+
+interface RawLink {
+	source: string | number
+	target: string | number
+}
+
+interface RawGraphData {
+	nodes: RawNodeFromData[]
+	links: RawLink[]
+}
+
+interface SpecialNodesData {
+	nodes: SpecialNode[]
+	links?: RawLink[]
+}
+
+// eslint-disable-next-line prefer-const
+let Graph: InstanceType<typeof ForceGraph>
 const NODE_SIZE = 24
 const NODE_LINK_DISTANCE = 40
-let NODE_LABEL_LINK_COLOR
-let NODE_BORDER_COLOR
-let NODE_BORDER_WIDTH = 2
+let NODE_LABEL_LINK_COLOR: string
+let NODE_BORDER_COLOR: string
+const NODE_BORDER_WIDTH = 2
 
 // compile custom HTML strings into cached Image objects
-function generateHtmlNodeImage(node) {
+function generateHtmlNodeImage(node: SpecialNode): CachedAsset {
 	const img = new Image()
 
 	const svgData = `
@@ -36,7 +97,7 @@ function generateHtmlNodeImage(node) {
 	return { ...node, img }
 }
 
-const specialNodes = {
+const specialNodes: SpecialNodesData = {
 	nodes: [
 		{
 			id: "special-node-1",
@@ -58,13 +119,13 @@ specialNodes.nodes.forEach((node) => {
 	node._cachedAsset = asset
 
 	// trigger graph refresh when image loads to repaint the image
-	asset.img.onload = () => {
+	asset.img.onload = (): void => {
 		Graph.refresh()
 	}
 })
 
 // load images for normal nodes
-const hydratedNodes = rawGraphData.nodes.map((node) => {
+const hydratedNodes: HydratedNode[] = (rawGraphData as RawGraphData).nodes.map((node: RawNodeFromData) => {
 	const img = new Image()
 	img.src = node.img
 
@@ -74,7 +135,7 @@ const hydratedNodes = rawGraphData.nodes.map((node) => {
 	img.src = exerciseImages[imageKey] || node.img
 
 	// trigger graph refresh when image loads to repaint the image
-	img.onload = () => {
+	img.onload = (): void => {
 		Graph.refresh()
 	}
 
@@ -84,12 +145,12 @@ const hydratedNodes = rawGraphData.nodes.map((node) => {
 	}
 })
 
-const graphData = {
+const graphData: { nodes: GraphNode[]; links: RawLink[] } = {
 	nodes: [...specialNodes.nodes, ...hydratedNodes],
-	links: [...(specialNodes?.links || []), ...rawGraphData.links],
+	links: [...(specialNodes?.links || []), ...(rawGraphData as RawGraphData).links],
 }
 
-function updateStyles() {
+function updateStyles(): void {
 	const BODY_STYLES = getComputedStyle(document.body)
 	NODE_LABEL_LINK_COLOR = BODY_STYLES.color
 	NODE_BORDER_COLOR = BODY_STYLES.getPropertyValue("--light-bg-base").trim()
@@ -104,51 +165,52 @@ window.addEventListener("resize", () => {
 	Graph.height(window.innerHeight)
 })
 
-let hoveredNode = null
+let hoveredNode: GraphNode | null = null
 
 Graph = new ForceGraph(graphContainer)
 	.graphData(graphData)
 	.linkColor(() => NODE_LABEL_LINK_COLOR)
 	.nodeLabel((node) => {
-		let text = node.url ?? node.id
-
+		const n = node as GraphNode
+		const text = n.url ?? n.id.toString()
 		return `<strong>${text}</strong>`
 	})
 	.nodeCanvasObject((node, ctx, globalScale) => {
-		const asset = node._cachedAsset
+		const n = node as GraphNode
+		const asset = (n as SpecialNode)._cachedAsset
 
 		// render special nodes at exact pixel sizes
 		if (asset) {
 			if (asset.img.complete && asset.img.naturalWidth > 0) {
 				// dividing by globalScale locks the node to exact physical screen pixels
-				const screenWidth = node.width / globalScale
-				const screenHeight = node.height / globalScale
+				const screenWidth = asset.width / globalScale
+				const screenHeight = asset.height / globalScale
 
-				ctx.drawImage(asset.img, node.x - screenWidth / 2, node.y - screenHeight / 2, screenWidth, screenHeight)
+				ctx.drawImage(asset.img, n.x! - screenWidth / 2, n.y! - screenHeight / 2, screenWidth, screenHeight)
 			}
 			return
 		}
 
 		// render normal nodes
-		let label = node.id.toString()
 		const fontSize = 20 / globalScale
 		ctx.font = `${fontSize}px Questrial`
 		ctx.textAlign = "center"
 		ctx.textBaseline = "middle"
 		ctx.fillStyle = NODE_LABEL_LINK_COLOR
 
-		if (node.img && node.img.complete && node.img.naturalWidth > 0) {
-			ctx.drawImage(node.img, node.x - NODE_SIZE / 2, node.y - NODE_SIZE / 2, NODE_SIZE, NODE_SIZE)
+		const hydrated = n as HydratedNode
+		if (hydrated.img && hydrated.img.complete && hydrated.img.naturalWidth > 0) {
+			ctx.drawImage(hydrated.img, n.x! - NODE_SIZE / 2, n.y! - NODE_SIZE / 2, NODE_SIZE, NODE_SIZE)
 		}
 
-		ctx.fillText(label, node.x, node.y + NODE_SIZE / 1.4)
+		ctx.fillText(n.id.toString(), n.x!, n.y! + NODE_SIZE / 1.4)
 
 		// highlight the contour of the currently hovered node
-		if (node === hoveredNode) {
+		if (n === hoveredNode) {
 			ctx.save()
 			ctx.beginPath()
 
-			ctx.arc(node.x, node.y, NODE_SIZE / 2, 0, 2 * Math.PI, false)
+			ctx.arc(n.x!, n.y!, NODE_SIZE / 2, 0, 2 * Math.PI, false)
 
 			ctx.strokeStyle = NODE_BORDER_COLOR
 			ctx.lineWidth = NODE_BORDER_WIDTH / globalScale
@@ -159,30 +221,31 @@ Graph = new ForceGraph(graphContainer)
 		}
 	})
 	.nodePointerAreaPaint((node, color, ctx, globalScale) => {
-		const asset = node._cachedAsset
+		const n = node as GraphNode
+		const asset = (n as SpecialNode)._cachedAsset
 		ctx.fillStyle = color
 
 		if (asset) {
 			const screenWidth = asset.width / globalScale
 			const screenHeight = asset.height / globalScale
 
-			ctx.fillRect(node.x - screenWidth / 2, node.y - screenHeight / 2, screenWidth, screenHeight)
+			ctx.fillRect(n.x! - screenWidth / 2, n.y! - screenHeight / 2, screenWidth, screenHeight)
 
 			return
 		}
 
 		// fallback hitbox for normal nodes (matches nodeCanvasObject default radius)
 		ctx.beginPath()
-		ctx.arc(node.x, node.y, NODE_SIZE, 0, 2 * Math.PI)
+		ctx.arc(n.x!, n.y!, NODE_SIZE, 0, 2 * Math.PI)
 		ctx.fill()
 	})
 	.onNodeHover((node) => {
-		hoveredNode = node
+		hoveredNode = node as GraphNode | null
 	})
 
-Graph.d3Force("link").distance(NODE_LINK_DISTANCE)
+Graph.d3Force("link")!.distance(NODE_LINK_DISTANCE)
 
-function goToPage(node) {
+function goToPage(node: GraphNode): void {
 	if (node?.url) {
 		window.open(node.url, "_blank")
 	} else {
@@ -192,6 +255,8 @@ function goToPage(node) {
 		window.location.href = `#/${categoryPath}${exercise}`
 	}
 }
+
+// Brave Mobile workaround
 
 /*
 	Issue: onNodeHover & onNodeClick not working for all nodes in Brave browser
@@ -206,11 +271,11 @@ function goToPage(node) {
  * Check if the browser is Brave Browser using Brave's official API and
  * check if the user is using a mobile device
  * */
-async function isBraveMobile() {
+async function isBraveMobile(): Promise<boolean> {
 	// @ts-ignore
 	const isBrave = !!(navigator.brave && (await navigator.brave.isBrave()))
 
-	const isMobile =
+	const isMobile: boolean =
 		// @ts-ignore
 		navigator.userAgentData?.mobile ||
 		// fallback for older browsers using regex matching
@@ -220,30 +285,30 @@ async function isBraveMobile() {
 }
 
 // find node at touch coordinates manually for Brave Mobile
-function getNodeAtScreenCoords(clientX, clientY) {
+function getNodeAtScreenCoords(clientX: number, clientY: number): GraphNode | null {
 	const graphCoords = Graph.screen2GraphCoords(clientX, clientY)
 	const globalScale = Graph.zoom()
 
 	// search backwards to hit top-rendered nodes first
 	for (let i = graphData.nodes.length - 1; i >= 0; i--) {
 		const node = graphData.nodes[i]
-		const asset = node._cachedAsset
+		const asset = (node as SpecialNode)._cachedAsset
 
 		if (asset) {
-			const halfWidth = node.width / globalScale / 2
-			const halfHeight = node.height / globalScale / 2
+			const halfWidth = asset.width / globalScale / 2
+			const halfHeight = asset.height / globalScale / 2
 
 			if (
-				graphCoords.x >= node.x - halfWidth &&
-				graphCoords.x <= node.x + halfWidth &&
-				graphCoords.y >= node.y - halfHeight &&
-				graphCoords.y <= node.y + halfHeight
+				graphCoords.x >= node.x! - halfWidth &&
+				graphCoords.x <= node.x! + halfWidth &&
+				graphCoords.y >= node.y! - halfHeight &&
+				graphCoords.y <= node.y! + halfHeight
 			) {
 				return node
 			}
 		} else {
-			const dx = node.x - graphCoords.x
-			const dy = node.y - graphCoords.y
+			const dx = node.x! - graphCoords.x
+			const dy = node.y! - graphCoords.y
 			const distance = Math.sqrt(dx * dx + dy * dy)
 
 			if (distance <= NODE_SIZE) {
@@ -259,7 +324,7 @@ function getNodeAtScreenCoords(clientX, clientY) {
 
 	if (!braveMobile) {
 		Graph.onNodeClick((node) => {
-			goToPage(node)
+			goToPage(node as GraphNode)
 		})
 	} else {
 		// a valid tap is fast and has virtually no panning movement
@@ -269,13 +334,13 @@ function getNodeAtScreenCoords(clientX, clientY) {
 		let touchStartTime = 0
 		let touchStartX = 0
 		let touchStartY = 0
-		let clickedNode = null
+		let clickedNode: GraphNode | null = null
 
-		function setGraphInteractions(enabled) {
+		function setGraphInteractions(enabled: boolean): void {
 			if (enabled) {
 				if (clickedNode) {
-					delete clickedNode.fx
-					delete clickedNode.fy
+					delete (clickedNode as SpecialNode).fx
+					delete (clickedNode as SpecialNode).fy
 				}
 				Graph.d3ReheatSimulation()
 			}
@@ -285,7 +350,7 @@ function getNodeAtScreenCoords(clientX, clientY) {
 		}
 
 		// detect where and when the touch started
-		graphContainer.addEventListener("pointerdown", (e) => {
+		graphContainer.addEventListener("pointerdown", (e: PointerEvent) => {
 			touchStartTime = Date.now()
 			touchStartX = e.clientX
 			touchStartY = e.clientY
@@ -296,7 +361,7 @@ function getNodeAtScreenCoords(clientX, clientY) {
 			}
 		})
 
-		graphContainer.addEventListener("pointermove", (e) => {
+		graphContainer.addEventListener("pointermove", (e: PointerEvent) => {
 			if (!clickedNode) return
 
 			// pin the node to the finger's position for the duration of the drag
@@ -306,7 +371,7 @@ function getNodeAtScreenCoords(clientX, clientY) {
 		})
 
 		// on release, check if it was a quick "tap" and locate the node manually
-		graphContainer.addEventListener("pointerup", (e) => {
+		graphContainer.addEventListener("pointerup", (e: PointerEvent) => {
 			if (!clickedNode) return
 
 			const touchDuration = Date.now() - touchStartTime
@@ -318,7 +383,7 @@ function getNodeAtScreenCoords(clientX, clientY) {
 			if (
 				touchDuration < TAP_MAX_DURATION_MS &&
 				movementX < TAP_MAX_MOVEMENT_PX &&
-				movementY < TAP_MAX_DURATION_MS
+				movementY < TAP_MAX_MOVEMENT_PX
 			) {
 				e.preventDefault()
 				goToPage(clickedNode)
